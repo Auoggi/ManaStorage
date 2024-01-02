@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "manastorage:block/test_block" }
+  }
+}
