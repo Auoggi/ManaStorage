@@ -1,0 +1,24 @@
+{
+    "itemGroup.manastorage_creative_mode_tab": "ManaStorage",
+
+    "item.manastorage.test_item": "Test Item, But Mana",
+
+    "item.manastorage.manastorage_tablet": "ManaStorage Tablet",
+    "item.manastorage.network_linker": "Network Linker",
+
+    "block.manastorage.test_block": "Test Block, But Mana",
+
+    "block.manastorage.storage_core": "ManaStorage Core",
+
+    "block.manastorage.basic_mana_importer": "Basic Mana Importer",
+    "block.manastorage.basic_mana_exporter": "Basic Mana Exporter",
+    "block.manastorage.advanced_mana_importer": "Advanced Mana Importer",
+    "block.manastorage.advanced_mana_exporter": "Advanced Mana Exporter",
+
+    "block.manastorage.1m_mana_storage_block": "1M Mana Storage Block",                 
+    "block.manastorage.4m_mana_storage_block": "4M Mana Storage Block",                 
+    "block.manastorage.16m_mana_storage_block": "16M Mana Storage Block",               
+    "block.manastorage.64m_mana_storage_block": "64M Mana Storage Block",
+    "block.manastorage.256m_mana_storage_block": "256M Mana Storage Block",
+    "block.manastorage.1024m_mana_storage_block": "1024M Mana Storage Block"
+}

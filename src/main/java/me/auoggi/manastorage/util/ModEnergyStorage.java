@@ -1,0 +1,72 @@
+package me.auoggi.manastorage.util;
+
+import net.minecraftforge.energy.IEnergyStorage;
+
+public abstract class ModEnergyStorage implements IEnergyStorage {
+    protected int energy;
+    protected int capacity;
+
+    @Override
+    public int getEnergyStored() {
+        return energy;
+    }
+
+    public double getEnergyStoredFraction() {
+        return (float) energy / (float) capacity;
+    }
+
+    public int getFullCapacity() {
+        return capacity;
+    }
+
+    public int getRemainingCapacity() {
+        return capacity - energy;
+    }
+
+    public ModEnergyStorage(int capacity) {
+        this.capacity = capacity;
+    }
+
+    @Override
+    public int receiveEnergy(int energy, boolean simulate) {
+        energy = Math.min(getRemainingCapacity(), energy);
+        if (!simulate) {
+            this.energy += energy;
+            if(energy != 0) onEnergyChanged();
+        }
+
+        return energy;
+    }
+
+    @Override
+    public int extractEnergy(int energy, boolean simulate) {
+        energy = Math.min(this.energy, energy);
+        if (!simulate) {
+            this.energy -= energy;
+            if(energy != 0) onEnergyChanged();
+        }
+
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public abstract void onEnergyChanged();
+
+    @Override
+    public boolean canExtract() {
+        return true;
+    }
+
+    @Override
+    public boolean canReceive() {
+        return true;
+    }
+
+    @Override
+    public int getMaxEnergyStored() {
+        return getFullCapacity();
+    }
+}

@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="manastorage"
+version="${mod_version}"
+displayName="ManaStorage"
+displayURL="https://github.com/Auoggi/ManaStorage"
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.manastorage]]
+   modId="forge"
+   mandatory=true
+   versionRange="${forge_version_range}"
+   ordering="NONE"
+   side="BOTH"
+[[dependencies.manastorage]]
+   modId="minecraft"
+   mandatory=true
+   versionRange="${minecraft_version_range}"
+   ordering="NONE"
+   side="BOTH"
+[[dependencies.manastorage]]
+modId="botania"
+mandatory=true
+versionRange="[1.18.2-435,)"
+ordering="NONE"
+side="BOTH"
