@@ -1,8 +1,11 @@
 package me.auoggi.manastorage.util;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public abstract class ModEnergyStorage implements IEnergyStorage {
+    public LazyOptional<IEnergyStorage> lazy = LazyOptional.empty();
+
     protected int energy;
     protected int capacity;
 
