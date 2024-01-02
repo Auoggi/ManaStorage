@@ -9,6 +9,7 @@ import me.auoggi.manastorage.packet.EnergySyncS2C;
 import me.auoggi.manastorage.packet.ManaSyncS2C;
 import me.auoggi.manastorage.screen.BasicImporterMenu;
 import me.auoggi.manastorage.util.ModEnergyStorage;
+import me.auoggi.manastorage.util.ModItemStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,10 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.subtile.TileEntityGeneratingFlower;
@@ -46,7 +44,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         }
     };
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
+    private final ModItemStorage itemStorage = new ModItemStorage(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -57,7 +55,6 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
             return slot == 0 && stack.getItem() == ModItems.testItem.get();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     private final ModEnergyStorage energyStorage = new ModEnergyStorage(ManaStorage.basicEnergyCapacity) {
         @Override
@@ -66,7 +63,6 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
             ModPackets.sendToClients(new EnergySyncS2C(energy, getBlockPos()));
         }
     };
-    private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
 
     public ModManaStorage getManaStorage() {
         return manaStorage;
@@ -91,7 +87,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         tag.putInt("Mana", manaStorage.getManaStored());
-        tag.put("Inventory", itemHandler.serializeNBT());
+        tag.put("Inventory", itemStorage.serializeNBT());
         tag.putInt("Energy", energyStorage.getEnergyStored());
 
         super.saveAdditional(tag);
@@ -100,7 +96,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public void load(@NotNull CompoundTag tag) {
         manaStorage.setMana(tag.getInt("Mana"));
-        itemHandler.deserializeNBT(tag.getCompound("Inventory"));
+        itemStorage.deserializeNBT(tag.getCompound("Inventory"));
         energyStorage.setEnergy(tag.getInt("Energy"));
 
         super.load(tag);
@@ -112,11 +108,11 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         //Make sure capabilities don't work on the front of the block
         if(getBlockState().getValue(BasicImporterBlock.FACING) != side) {
             if(cap == CapabilityEnergy.ENERGY) {
-                return lazyEnergyStorage.cast();
+                return energyStorage.lazy.cast();
             }
 
             if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-                return lazyItemHandler.cast();
+                return itemStorage.lazy.cast();
             }
         }
 
@@ -125,15 +121,15 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     public void onLoad() {
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-        lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
+        itemStorage.lazy = LazyOptional.of(() -> itemStorage);
+        energyStorage.lazy = LazyOptional.of(() -> energyStorage);
         super.onLoad();
     }
 
     @Override
     public void invalidateCaps() {
-        lazyItemHandler.invalidate();
-        lazyEnergyStorage.invalidate();
+        itemStorage.lazy.invalidate();
+        energyStorage.lazy.invalidate();
         super.invalidateCaps();
     }
 
@@ -149,9 +145,9 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void dropContents() {
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for(int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
+        SimpleContainer inventory = new SimpleContainer(itemStorage.getSlots());
+        for(int i = 0; i < itemStorage.getSlots(); i++) {
+            inventory.setItem(i, itemStorage.getStackInSlot(i));
         }
 
         Containers.dropContents(level, worldPosition, inventory);
