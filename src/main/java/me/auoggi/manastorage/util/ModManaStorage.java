@@ -44,8 +44,9 @@ public abstract class ModManaStorage {
         return mana;
     }
 
+    /**Do not use without calling onManaChanged(), except for syncing between server and client.*/
     public void setMana(int mana) {
-        this.mana = mana;
+        this.mana = Math.max(0, mana);
     }
 
     public abstract void onManaChanged();
