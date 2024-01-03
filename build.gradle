@@ -16,11 +16,11 @@ plugins {
 
 apply plugin: 'org.spongepowered.mixin'
 
-group = mod_group_id
+group = "me.auoggi"
 version = mod_version
 
 base {
-    archivesName = mod_id
+    archivesName = "manastorage"
 }
 
 java {
@@ -28,7 +28,7 @@ java {
 }
 
 minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+    mappings channel: "official", version: "1.18.2"
 
     copyIdeResources = true
 
@@ -41,29 +41,29 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                "${mod_id}" {
+                "manastorage" {
                     source sourceSets.main
                 }
             }
         }
 
         client {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            property 'forge.enabledGameTestNamespaces', "manastorage"
         }
 
         server {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            property 'forge.enabledGameTestNamespaces', "manastorage"
             args '--nogui'
         }
 
         gameTestServer {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            property 'forge.enabledGameTestNamespaces', "manastorage"
         }
 
         data {
             workingDirectory project.file('run-data')
 
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', "manastorage", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
 }
@@ -78,7 +78,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:1.18.2-${forge_version}"
 
     implementation fg.deobf("vazkii.botania:Botania:1.18.2-435")
     implementation fg.deobf('vazkii.patchouli:Patchouli:1.18.2-71.1')
@@ -92,11 +92,11 @@ dependencies {
 
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
-            loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors: mod_authors, mod_description: mod_description,
+            minecraft_version: "1.18.2", minecraft_version_range: "[1.18.2,1.19)",
+            forge_version: forge_version, forge_version_range: "[40,)",
+            loader_version_range: "[40,)",
+            mod_id: "manastorage", mod_name: "ManaStorage", mod_license: "All-Rights-Reserved", mod_version: mod_version,
+            mod_authors: "Auoggi", mod_description: "Adds a storage system to store Mana",
     ]
 
     inputs.properties replaceProperties
