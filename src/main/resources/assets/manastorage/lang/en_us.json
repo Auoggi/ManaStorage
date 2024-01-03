@@ -1,6 +1,10 @@
 {
     "itemGroup.manastorage_creative_mode_tab": "ManaStorage",
 
+    "hovertext.manastorage.bound": "Bound to: ",
+    "hovertext.manastorage.bound_not_loaded": "Bounded block is not loaded.",
+    "hovertext.manastorage.not_bound": "Not yet bound.",
+
     "item.manastorage.test_item": "Test Item, But Mana",
 
     "item.manastorage.manastorage_tablet": "ManaStorage Tablet",

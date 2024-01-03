@@ -68,10 +68,6 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         return manaStorage;
     }
 
-    public void setMana(int mana) {
-        manaStorage.setMana(mana);
-    }
-
     public ModEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
@@ -96,8 +92,10 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public void load(@NotNull CompoundTag tag) {
         manaStorage.setMana(tag.getInt("Mana"));
+        manaStorage.onManaChanged();
         itemStorage.deserializeNBT(tag.getCompound("Inventory"));
         energyStorage.setEnergy(tag.getInt("Energy"));
+        energyStorage.onEnergyChanged();
 
         super.load(tag);
     }
@@ -155,16 +153,16 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
     public int importMana(Level level, BlockPos blockPos, BlockState blockState, int amount, boolean simulate) {
         BlockEntity facing = level.getBlockEntity(blockPos.relative(blockState.getValue(BasicImporterBlock.FACING)));
-        if (facing instanceof TileEntityGeneratingFlower flower) {
+        if(facing instanceof TileEntityGeneratingFlower flower) {
             amount = Math.min(flower.getMana(), amount);
-            if (!simulate) {
+            if(!simulate) {
                 flower.addMana(-amount);
                 flower.sync();
             }
             return amount;
-        } else if (facing instanceof TilePool pool) {
+        } else if(facing instanceof TilePool pool) {
             amount = Math.min(pool.getCurrentMana(), amount);
-            if (!simulate) pool.receiveMana(-amount);
+            if(!simulate) pool.receiveMana(-amount);
             return amount;
         }
 
