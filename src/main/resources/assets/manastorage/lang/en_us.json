@@ -20,5 +20,8 @@
     "block.manastorage.16m_mana_storage_block": "16M Mana Storage Block",               
     "block.manastorage.64m_mana_storage_block": "64M Mana Storage Block",
     "block.manastorage.256m_mana_storage_block": "256M Mana Storage Block",
-    "block.manastorage.1024m_mana_storage_block": "1024M Mana Storage Block"
+    "block.manastorage.1024m_mana_storage_block": "1024M Mana Storage Block",
+
+    "lexicon.category.manastorage.manastorage.name": "ManaStorage",
+    "lexicon.category.manastorage.manastorage.description": "Adds a storage system to store Mana"
 }
