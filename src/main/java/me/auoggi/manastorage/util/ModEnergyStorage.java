@@ -32,7 +32,7 @@ public abstract class ModEnergyStorage implements IEnergyStorage {
 
     @Override
     public int receiveEnergy(int energy, boolean simulate) {
-        energy = Math.min(getRemainingCapacity(), energy);
+        energy = Math.abs(Math.min(getRemainingCapacity(), energy));
         if (!simulate) {
             this.energy += energy;
             if(energy != 0) onEnergyChanged();
@@ -43,7 +43,7 @@ public abstract class ModEnergyStorage implements IEnergyStorage {
 
     @Override
     public int extractEnergy(int energy, boolean simulate) {
-        energy = Math.min(this.energy, energy);
+        energy = Math.abs(Math.min(this.energy, energy));
         if (!simulate) {
             this.energy -= energy;
             if(energy != 0) onEnergyChanged();

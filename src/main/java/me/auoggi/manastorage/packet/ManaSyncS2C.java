@@ -32,11 +32,7 @@ public class ManaSyncS2C {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof BasicImporterBlockEntity blockEntity) {
-                blockEntity.setMana(mana);
-
-                if(Minecraft.getInstance().player.containerMenu instanceof BasicImporterMenu menu && menu.getBlockEntity().getBlockPos().equals(blockPos)) {
-                    menu.getBlockEntity().setMana(mana);
-                }
+                blockEntity.getManaStorage().setMana(mana);
             }
         });
         return true;
