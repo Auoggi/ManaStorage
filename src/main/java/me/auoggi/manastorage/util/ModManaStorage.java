@@ -26,7 +26,7 @@ public abstract class ModManaStorage {
 
     public int receiveMana(int mana, boolean simulate) {
         mana = Math.abs(Math.min(getRemainingCapacity(), mana));
-        if (!simulate) {
+        if(!simulate) {
             this.mana += mana;
             if(mana != 0) onManaChanged();
         }
@@ -36,7 +36,7 @@ public abstract class ModManaStorage {
 
     public int extractMana(int mana, boolean simulate) {
         mana = Math.abs(Math.min(this.mana, mana));
-        if (!simulate) {
+        if(!simulate) {
             this.mana -= mana;
             if(mana != 0) onManaChanged();
         }
