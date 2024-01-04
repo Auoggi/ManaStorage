@@ -17,11 +17,11 @@ public class ManaInfoArea extends GuiComponent {
     protected final Rect2i rect;
     private final ModManaStorage mana;
 
-    public ManaInfoArea(int x, int y, ModManaStorage mana)  {
+    public ManaInfoArea(int x, int y, ModManaStorage mana) {
         this(x, y, 15, 64, mana);
     }
 
-    public ManaInfoArea(int x, int y, int width, int height, ModManaStorage mana)  {
+    public ManaInfoArea(int x, int y, int width, int height, ModManaStorage mana) {
         rect = new Rect2i(x, y, width, height);
         this.mana = mana;
     }

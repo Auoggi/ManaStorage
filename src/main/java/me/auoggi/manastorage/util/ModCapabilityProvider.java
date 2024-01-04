@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class ModCapabilityProvider implements ICapabilityProvider {
     private final ICapabilityProvider parent;
@@ -24,7 +23,8 @@ public class ModCapabilityProvider implements ICapabilityProvider {
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction) {
         for(ModCapability cap : capabilities) {
-            if(cap.capability == capability) return LazyOptional.of(() -> Objects.requireNonNull(cap.value.get())).cast();
+            if(cap.capability == capability)
+                return LazyOptional.of(() -> Objects.requireNonNull(cap.value.get())).cast();
         }
         return this.parent != null ? this.parent.getCapability(capability, direction) : LazyOptional.empty();
     }

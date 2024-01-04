@@ -52,9 +52,11 @@ public abstract class ModEnergyStorage implements IEnergyStorage {
         return energy;
     }
 
-    /**Do not use without calling onEnergyChanged(), except for syncing between server and client.*/
+    /**
+     * Do not use without calling onEnergyChanged(), except for syncing between server and client.
+     */
     public void setEnergy(int energy) {
-        this.energy = Math.max(0, energy);;
+        this.energy = Math.max(0, energy);
     }
 
     public abstract void onEnergyChanged();

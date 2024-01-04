@@ -12,6 +12,7 @@ public class ModPackets {
     private static SimpleChannel instance;
 
     private static int packetId = 0;
+
     private static int id() {
         return packetId++;
     }
