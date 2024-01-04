@@ -17,11 +17,11 @@ public class EnergyInfoArea extends GuiComponent {
     protected final Rect2i rect;
     private final ModEnergyStorage energy;
 
-    public EnergyInfoArea(int x, int y, ModEnergyStorage energy)  {
+    public EnergyInfoArea(int x, int y, ModEnergyStorage energy) {
         this(x, y, 15, 64, energy);
     }
 
-    public EnergyInfoArea(int x, int y, int width, int height, ModEnergyStorage energy)  {
+    public EnergyInfoArea(int x, int y, int width, int height, ModEnergyStorage energy) {
         rect = new Rect2i(x, y, width, height);
         this.energy = energy;
     }

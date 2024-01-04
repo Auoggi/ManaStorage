@@ -157,7 +157,7 @@ public class ManaStorageTablet extends Item {
         @Override
         public int getMana() {
             BasicImporterBlockEntity bound = getBound(ManaStorage.server, stack);
-            return isBoundLoaded(ManaStorage.server,stack) && bound != null ? bound.getManaStorage().getManaStored() : 0;
+            return isBoundLoaded(ManaStorage.server, stack) && bound != null ? bound.getManaStorage().getManaStored() : 0;
         }
 
         @Override
