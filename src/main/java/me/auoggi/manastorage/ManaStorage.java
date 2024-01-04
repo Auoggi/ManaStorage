@@ -3,6 +3,7 @@ package me.auoggi.manastorage;
 import me.auoggi.manastorage.screen.BasicImporterScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +26,7 @@ public class ManaStorage {
     public static final int advancedEnergyCapacity = advancedEnergyUsage * 200;
 
     public static MinecraftServer server;
+    public static Level clientLevel;
 
     public ManaStorage() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -50,7 +52,11 @@ public class ManaStorage {
 
     @SubscribeEvent
     public void tick(final TickEvent.WorldTickEvent event) {
-        MinecraftServer server = event.world.getServer();
-        if(!event.world.isClientSide && server != null) ManaStorage.server = server;
+        if(event.world.isClientSide) {
+            clientLevel = event.world;
+        } else {
+            MinecraftServer server = event.world.getServer();
+            if(server != null) ManaStorage.server = server;
+        }
     }
 }

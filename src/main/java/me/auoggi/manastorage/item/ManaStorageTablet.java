@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-//TODO doesn't unload
 //TODO Replace BasicImporterBlockEntity with CoreEntity when it is added
 public class ManaStorageTablet extends Item {
     public ManaStorageTablet(Properties p_41383_) {
@@ -52,7 +51,7 @@ public class ManaStorageTablet extends Item {
         Player player = context.getPlayer();
         Level level = context.getLevel();
 
-        if(player != null && player.isShiftKeyDown() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof BasicImporterBlockEntity entity) {
+        if(player != null && player.isCrouching() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof BasicImporterBlockEntity entity) {
             bind(player.getItemInHand(player.getUsedItemHand()), entity);
             return InteractionResult.SUCCESS;
         }
@@ -68,7 +67,7 @@ public class ManaStorageTablet extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> stacks, @NotNull TooltipFlag flags) {
         if(isBound(stack)) {
-            if(isBoundLoaded(ManaStorage.server, stack)) {
+            if(isBoundLoaded(ManaStorage.clientLevel, stack)) {
                 stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.BlockPos(bound(stack).pos())).withStyle(ChatFormatting.GRAY));
             } else {
                 stacks.add(new TranslatableComponent("hovertext.manastorage.bound_not_loaded").withStyle(ChatFormatting.GRAY));
@@ -130,16 +129,10 @@ public class ManaStorageTablet extends Item {
     private boolean isBound(ItemStack stack) {
         return bound(stack) != null;
     }
-
-    private boolean isBoundLoaded(MinecraftServer server, ItemStack stack) {
-        if(server == null) return false;
-
+    private boolean isBoundLoaded(Level level, ItemStack stack) {
         GlobalPos pos = bound(stack);
-        if(pos == null) return false;
-
-        Level level = server.getLevel(pos.dimension());
-        if(level != null && level.isLoaded(pos.pos())) {
-            if(getBound(server, stack) == null) {
+        if(level != null && level.isClientSide && pos != null && level.isLoaded(pos.pos())) {
+            if(getBound(ManaStorage.server, stack) == null) {
                 stack.getOrCreateTag().remove("bound");
             }
             return true;
@@ -157,19 +150,19 @@ public class ManaStorageTablet extends Item {
         @Override
         public int getMana() {
             BasicImporterBlockEntity bound = getBound(ManaStorage.server, stack);
-            return isBoundLoaded(ManaStorage.server, stack) && bound != null ? bound.getManaStorage().getManaStored() : 0;
+            return isBoundLoaded(ManaStorage.clientLevel, stack) && bound != null ? bound.getManaStorage().getManaStored() : 0;
         }
 
         @Override
         public int getMaxMana() {
             BasicImporterBlockEntity bound = getBound(ManaStorage.server, stack);
-            return isBoundLoaded(ManaStorage.server, stack) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
+            return isBoundLoaded(ManaStorage.clientLevel, stack) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
         }
 
         @Override
         public void addMana(int mana) {
             ModManaStorage manaStorage = getBound(ManaStorage.server, stack).getManaStorage();
-            if(isBoundLoaded(ManaStorage.server, stack) && manaStorage != null) {
+            if(isBoundLoaded(ManaStorage.clientLevel, stack) && manaStorage != null) {
                 if(mana > 0) manaStorage.receiveMana(mana, false);
                 else manaStorage.extractMana(mana, false);
             }
@@ -217,12 +210,12 @@ public class ManaStorageTablet extends Item {
 
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
-        return Optional.of(ManaBarTooltip.fromManaItem(stack));
+        return isBoundLoaded(ManaStorage.clientLevel, stack) ? Optional.of(ManaBarTooltip.fromManaItem(stack)) : Optional.empty();
     }
 
     @Override
     public boolean isBarVisible(@NotNull ItemStack stack) {
-        return isBoundLoaded(ManaStorage.server, stack);
+        return isBoundLoaded(ManaStorage.clientLevel, stack);
     }
 
     @Override
