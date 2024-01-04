@@ -66,4 +66,6 @@ public abstract class BaseBlockEntity extends BlockEntity implements MenuProvide
     }
 
     protected abstract void tick(Level level, BlockPos blockPos, BlockState blockState);
+
+    public abstract boolean enabled();
 }

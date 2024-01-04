@@ -2,7 +2,8 @@
     "itemGroup.manastorage_creative_mode_tab": "ManaStorage",
 
     "hovertext.manastorage.bound": "Bound to: ",
-    "hovertext.manastorage.bound_not_loaded": "Bounded block is not loaded.",
+    "hovertext.manastorage.bound_not_loaded": "Bounded ManaStorage Core is not loaded.",
+    "hovertext.manastorage.bound_not_powered": "Bounded ManaStorage Core is not powered.",
     "hovertext.manastorage.not_bound": "Not yet bound.",
 
     "item.manastorage.test_item": "Test Item, But Mana",

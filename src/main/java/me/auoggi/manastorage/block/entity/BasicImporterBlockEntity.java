@@ -36,6 +36,8 @@ import vazkii.botania.api.subtile.TileEntityGeneratingFlower;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
 public class BasicImporterBlockEntity extends BlockEntity implements MenuProvider {
+    private boolean powered;
+
     private final ModManaStorage manaStorage = new ModManaStorage(500000) {
         @Override
         public void onManaChanged() {
@@ -138,8 +140,13 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void tick(Level level, BlockPos blockPos, BlockState blockState) {
-        if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
-            importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.importerSpeed, true), false), false);
+        if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage) {
+            powered = true;
+            if(manaStorage.getRemainingCapacity() != 0)
+                importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.importerSpeed, true), false), false);
+        } else {
+            powered = false;
+        }
     }
 
     public void dropContents() {
@@ -167,6 +174,10 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         }
 
         return 0;
+    }
+
+    public boolean powered() {
+        return powered;
     }
 
     @Override
