@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+//TODO FIX Client and Server not synced
 //TODO Replace BasicImporterBlockEntity with CoreEntity when it is added
 public class ManaStorageTablet extends Item {
     public ManaStorageTablet(Properties p_41383_) {
@@ -50,7 +51,8 @@ public class ManaStorageTablet extends Item {
         Player player = context.getPlayer();
         Level level = context.getLevel();
 
-        if(player != null && player.isCrouching() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof BasicImporterBlockEntity entity) {
+        if(player != null && player.isShiftKeyDown() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof BasicImporterBlockEntity entity) {
+            entity.setChanged();
             bind(player.getItemInHand(player.getUsedItemHand()), entity);
             return InteractionResult.SUCCESS;
         }
@@ -68,7 +70,7 @@ public class ManaStorageTablet extends Item {
         if(isBound(stack)) {
             if(isBoundLoaded(stack)) {
                 if(isBoundPowered(stack)) {
-                    stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.BlockPos(bound(stack).pos())).withStyle(ChatFormatting.GRAY));
+                    stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.BlockPos(bound(stack))).withStyle(ChatFormatting.GRAY));
                 } else {
                     stacks.add(new TranslatableComponent("hovertext.manastorage.bound_not_powered").withStyle(ChatFormatting.GRAY));
                 }
@@ -97,19 +99,30 @@ public class ManaStorageTablet extends Item {
         }
     }
 
+    private String lastThread = "";
+
     private GlobalPos bound(ItemStack stack) {
+        String thread = Thread.currentThread().getName();
+        if(!lastThread.equals(thread)) {
+            System.out.println("I am being accessed from: " + thread);
+            lastThread = thread;
+        }
+
         if(!stack.getOrCreateTag().contains("bound")) {
             return null;
         }
 
         GlobalPos pos = GlobalPos.CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().get("bound")).result().filter(position -> position.pos().getY() != Integer.MIN_VALUE).orElse(null);
-        Level level = ManaStorage.server.getLevel(pos.dimension());
-        if(level != null && level.getChunkAt(pos.pos()).getBlockEntity(pos.pos(), LevelChunk.EntityCreationType.IMMEDIATE) instanceof BasicImporterBlockEntity) {
-            return pos;
-        } else {
-            stack.getOrCreateTag().remove("bound");
-            return null;
+        Level level = ManaStorage.server.getLevel(Objects.requireNonNull(pos).dimension());
+        if(level != null) {
+            if(level.getChunkAt(pos.pos()).getBlockEntity(pos.pos(), LevelChunk.EntityCreationType.IMMEDIATE) instanceof BasicImporterBlockEntity) {
+                return pos;
+            } else {
+                stack.getOrCreateTag().remove("bound");
+                return null;
+            }
         }
+        return null;
     }
 
     private BasicImporterBlockEntity getBound(ItemStack stack) {
@@ -151,7 +164,6 @@ public class ManaStorageTablet extends Item {
     }
 
     private boolean isBoundLoadedAndPowered(ItemStack stack) {
-
         return isBoundLoaded(stack) && isBoundPowered(stack);
     }
 
@@ -176,11 +188,9 @@ public class ManaStorageTablet extends Item {
 
         @Override
         public void addMana(int mana) {
-            ModManaStorage manaStorage = getBound(stack).getManaStorage();
-            if(isBoundLoadedAndPowered(stack)) {
-                if(mana > 0) manaStorage.receiveMana(mana, false);
-                else manaStorage.extractMana(mana, false);
-            }
+            ModManaStorage manaStorage = Objects.requireNonNull(getBound(stack)).getManaStorage();
+            if(mana > 0) manaStorage.receiveMana(mana, false);
+            else manaStorage.extractMana(mana, false);
         }
 
         @Override
