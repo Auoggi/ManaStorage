@@ -14,7 +14,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -67,8 +66,12 @@ public class ManaStorageTablet extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> stacks, @NotNull TooltipFlag flags) {
         if(isBound(stack)) {
-            if(isBoundLoaded(ManaStorage.clientLevel, stack)) {
-                stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.BlockPos(bound(stack).pos())).withStyle(ChatFormatting.GRAY));
+            if(isBoundLoaded(stack)) {
+                if(isBoundPowered(stack)) {
+                    stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.BlockPos(bound(stack).pos())).withStyle(ChatFormatting.GRAY));
+                } else {
+                    stacks.add(new TranslatableComponent("hovertext.manastorage.bound_not_powered").withStyle(ChatFormatting.GRAY));
+                }
             } else {
                 stacks.add(new TranslatableComponent("hovertext.manastorage.bound_not_loaded").withStyle(ChatFormatting.GRAY));
             }
@@ -99,12 +102,19 @@ public class ManaStorageTablet extends Item {
             return null;
         }
 
-        return GlobalPos.CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().get("bound")).result().filter(position -> position.pos().getY() != Integer.MIN_VALUE).orElse(null);
+        GlobalPos pos = GlobalPos.CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().get("bound")).result().filter(position -> position.pos().getY() != Integer.MIN_VALUE).orElse(null);
+        Level level = ManaStorage.server.getLevel(pos.dimension());
+        if(level != null && level.getChunkAt(pos.pos()).getBlockEntity(pos.pos(), LevelChunk.EntityCreationType.IMMEDIATE) instanceof BasicImporterBlockEntity) {
+            return pos;
+        } else {
+            stack.getOrCreateTag().remove("bound");
+            return null;
+        }
     }
 
-    private BasicImporterBlockEntity getBound(MinecraftServer server, ItemStack stack) {
+    private BasicImporterBlockEntity getBound(ItemStack stack) {
         if(isBound(stack)) {
-            if(server == null) {
+            if(ManaStorage.server == null) {
                 System.out.println("server is null");
                 return null; //return something
             }
@@ -115,12 +125,11 @@ public class ManaStorageTablet extends Item {
                 return null; //return something
             }
 
-            Level level = server.getLevel(pos.dimension());
+            Level level = ManaStorage.server.getLevel(pos.dimension());
             if(level != null && level.getChunkAt(pos.pos()).getBlockEntity(pos.pos(), LevelChunk.EntityCreationType.IMMEDIATE) instanceof BasicImporterBlockEntity entity) {
                 return entity;
             }
 
-            //System.out.println("level.getBlockEntity(pos.pos()) = " + level.getBlockEntity(pos.pos()) + ", where level = " + level + " and pos.pos() = " + pos.pos());
             return null;
         }
         return null;
@@ -129,15 +138,21 @@ public class ManaStorageTablet extends Item {
     private boolean isBound(ItemStack stack) {
         return bound(stack) != null;
     }
-    private boolean isBoundLoaded(Level level, ItemStack stack) {
+
+    private boolean isBoundLoaded(ItemStack stack) {
         GlobalPos pos = bound(stack);
-        if(level != null && level.isClientSide && pos != null && level.isLoaded(pos.pos())) {
-            if(getBound(ManaStorage.server, stack) == null) {
-                stack.getOrCreateTag().remove("bound");
-            }
-            return true;
-        }
-        return false;
+        return ManaStorage.clientLevel != null && ManaStorage.clientLevel.isClientSide && pos != null && ManaStorage.clientLevel.isLoaded(pos.pos());
+    }
+
+    private boolean isBoundPowered(ItemStack stack) {
+        GlobalPos pos = bound(stack);
+        BasicImporterBlockEntity bound  = getBound(stack);
+        return ManaStorage.clientLevel != null && ManaStorage.clientLevel.isClientSide && pos != null && ManaStorage.clientLevel.isLoaded(pos.pos()) && bound != null && bound.powered();
+    }
+
+    private boolean isBoundLoadedAndPowered(ItemStack stack) {
+
+        return isBoundLoaded(stack) && isBoundPowered(stack);
     }
 
     public class ManaItem implements IManaItem {
@@ -149,20 +164,20 @@ public class ManaStorageTablet extends Item {
 
         @Override
         public int getMana() {
-            BasicImporterBlockEntity bound = getBound(ManaStorage.server, stack);
-            return isBoundLoaded(ManaStorage.clientLevel, stack) && bound != null ? bound.getManaStorage().getManaStored() : 0;
+            BasicImporterBlockEntity bound = getBound(stack);
+            return isBoundLoadedAndPowered(stack) && bound != null ? bound.getManaStorage().getManaStored() : 0;
         }
 
         @Override
         public int getMaxMana() {
-            BasicImporterBlockEntity bound = getBound(ManaStorage.server, stack);
-            return isBoundLoaded(ManaStorage.clientLevel, stack) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
+            BasicImporterBlockEntity bound = getBound(stack);
+            return isBoundLoadedAndPowered(stack) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
         }
 
         @Override
         public void addMana(int mana) {
-            ModManaStorage manaStorage = getBound(ManaStorage.server, stack).getManaStorage();
-            if(isBoundLoaded(ManaStorage.clientLevel, stack) && manaStorage != null) {
+            ModManaStorage manaStorage = getBound(stack).getManaStorage();
+            if(isBoundLoadedAndPowered(stack)) {
                 if(mana > 0) manaStorage.receiveMana(mana, false);
                 else manaStorage.extractMana(mana, false);
             }
@@ -210,12 +225,12 @@ public class ManaStorageTablet extends Item {
 
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
-        return isBoundLoaded(ManaStorage.clientLevel, stack) ? Optional.of(ManaBarTooltip.fromManaItem(stack)) : Optional.empty();
+        return isBoundLoadedAndPowered(stack) ? Optional.of(ManaBarTooltip.fromManaItem(stack)) : Optional.empty();
     }
 
     @Override
     public boolean isBarVisible(@NotNull ItemStack stack) {
-        return isBoundLoaded(ManaStorage.clientLevel, stack);
+        return isBoundLoadedAndPowered(stack);
     }
 
     @Override
