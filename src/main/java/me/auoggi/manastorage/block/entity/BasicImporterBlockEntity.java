@@ -42,7 +42,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         @Override
         public void onManaChanged() {
             setChanged();
-            ModPackets.sendToClients(new ManaSyncS2C(mana, getBlockPos()));
+            ModPackets.sendToClients(new ManaSyncS2C(getManaStored(), getBlockPos()));
         }
     };
 
@@ -62,7 +62,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         @Override
         public void onEnergyChanged() {
             setChanged();
-            ModPackets.sendToClients(new EnergySyncS2C(energy, getBlockPos()));
+            ModPackets.sendToClients(new EnergySyncS2C(getEnergyStored(), getBlockPos()));
         }
     };
 
@@ -72,10 +72,6 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
     public ModEnergyStorage getEnergyStorage() {
         return energyStorage;
-    }
-
-    public void setEnergy(int energy) {
-        energyStorage.setEnergy(energy);
     }
 
     public BasicImporterBlockEntity(BlockPos blockPos, BlockState blockState) {

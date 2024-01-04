@@ -6,8 +6,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 public abstract class ModEnergyStorage implements IEnergyStorage {
     public LazyOptional<IEnergyStorage> lazy = LazyOptional.empty();
 
-    protected int energy;
-    protected int capacity;
+    private int energy = 0;
+    private final int capacity;
 
     @Override
     public int getEnergyStored() {

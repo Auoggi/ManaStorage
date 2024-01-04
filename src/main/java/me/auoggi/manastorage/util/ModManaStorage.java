@@ -1,8 +1,8 @@
 package me.auoggi.manastorage.util;
 
 public abstract class ModManaStorage {
-    protected int mana;
-    protected int capacity;
+    private int mana = 0;
+    private final int capacity;
 
     public int getManaStored() {
         return mana;
