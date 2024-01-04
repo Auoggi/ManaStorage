@@ -32,11 +32,7 @@ public class EnergySyncS2C {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof BasicImporterBlockEntity blockEntity) {
-                blockEntity.setEnergy(energy);
-
-                if(Minecraft.getInstance().player.containerMenu instanceof BasicImporterMenu menu && menu.getBlockEntity().getBlockPos().equals(blockPos)) {
-                    menu.getBlockEntity().setEnergy(energy);
-                }
+                blockEntity.getEnergyStorage().setEnergy(energy);
             }
         });
         return true;
