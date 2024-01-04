@@ -52,7 +52,6 @@ public class ManaStorageTablet extends Item {
         Level level = context.getLevel();
 
         if(player != null && player.isShiftKeyDown() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof BasicImporterBlockEntity entity) {
-            entity.setChanged();
             bind(player.getItemInHand(player.getUsedItemHand()), entity);
             return InteractionResult.SUCCESS;
         }
