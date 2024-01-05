@@ -15,7 +15,7 @@ public abstract class ModEnergyStorage implements IEnergyStorage {
     }
 
     public double getEnergyStoredFraction() {
-        return (float) energy / (float) capacity;
+        return (double) energy / (double) capacity;
     }
 
     public int getFullCapacity() {

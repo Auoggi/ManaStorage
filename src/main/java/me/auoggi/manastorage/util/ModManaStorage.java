@@ -9,7 +9,7 @@ public abstract class ModManaStorage {
     }
 
     public double getManaStoredFraction() {
-        return (float) mana / (float) capacity;
+        return (double) mana / (double) capacity;
     }
 
     public int getFullCapacity() {
