@@ -1,7 +1,6 @@
 package me.auoggi.manastorage.packet;
 
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
-import me.auoggi.manastorage.screen.BasicImporterMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
