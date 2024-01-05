@@ -40,6 +40,10 @@ public class ModPackets {
                 .add();
     }
 
+    public static <MSG> void sendToServer(MSG message) {
+        instance.sendToServer(message);
+    }
+
     public static <MSG> void sendToClients(MSG message) {
         instance.send(PacketDistributor.ALL.noArg(), message);
     }
