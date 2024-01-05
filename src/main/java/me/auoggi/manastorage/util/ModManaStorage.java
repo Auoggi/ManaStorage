@@ -20,6 +20,14 @@ public abstract class ModManaStorage {
         return capacity - mana;
     }
 
+    public boolean isEmpty() {
+        return mana <= 0;
+    }
+
+    public boolean isFull() {
+        return mana >= capacity;
+    }
+
     public ModManaStorage(int capacity) {
         this.capacity = capacity;
     }
