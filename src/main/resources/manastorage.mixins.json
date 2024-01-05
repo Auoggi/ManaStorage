@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.auoggi.manastorage.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "me.auoggi.manastorage.refmap.json",
+  "mixins": [
+    "TilePoolMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -68,6 +68,12 @@ minecraft {
     }
 }
 
+mixin {
+    add sourceSets.main, "manastorage.refmap.json"
+
+    config "manastorage.mixins.json"
+}
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
