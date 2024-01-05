@@ -134,6 +134,9 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void tick(Level level, BlockPos blockPos, BlockState blockState) {
+        ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), getBlockPos()));
+        ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), getBlockPos()));
+
         if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
             importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.importerSpeed, true), false), false);
     }

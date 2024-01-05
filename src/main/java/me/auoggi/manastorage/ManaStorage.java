@@ -21,8 +21,8 @@ public class ManaStorage {
     public static final int exporterSpeed = 800;
     public static final int basicEnergyUsage = 1600;
     public static final int advancedEnergyUsage = 16000;
-    public static final int basicEnergyCapacity = basicEnergyUsage * 200;
-    public static final int advancedEnergyCapacity = advancedEnergyUsage * 200;
+    public static final int basicEnergyCapacity = basicEnergyUsage * 100;
+    public static final int advancedEnergyCapacity = advancedEnergyUsage * 100;
 
     public ManaStorage() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
