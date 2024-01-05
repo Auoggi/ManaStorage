@@ -31,9 +31,7 @@ public class BasicImporterMenu extends AbstractContainerMenu {
 
         addPlayerInventory(inventory);
 
-        this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
-            addSlot(new SlotItemHandler(handler, 0, 80, 37));
-        });
+        this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> addSlot(new SlotItemHandler(handler, 0, 80, 37)));
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
