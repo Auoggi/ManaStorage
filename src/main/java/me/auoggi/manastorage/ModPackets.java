@@ -3,6 +3,7 @@ package me.auoggi.manastorage;
 import me.auoggi.manastorage.packet.EnergySyncS2C;
 import me.auoggi.manastorage.packet.ManaSyncS2C;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -42,6 +43,10 @@ public class ModPackets {
 
     public static <MSG> void sendToServer(MSG message) {
         instance.sendToServer(message);
+    }
+
+    public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
+        instance.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
 
     public static <MSG> void sendToClients(MSG message) {
