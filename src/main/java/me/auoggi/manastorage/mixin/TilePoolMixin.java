@@ -25,7 +25,7 @@ import vazkii.botania.xplat.BotaniaConfig;
 import java.util.List;
 
 //Remap set to false and marking mixin as @Pseudo makes it possible to mix into classes that don't exist at runtime - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Pseudo.html
-////Priority of Integer.MAX_VALUE will ensure it is always dead last in the method - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Mixin.html#priority--
+//Priority of Integer.MAX_VALUE will ensure it is always dead last - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Mixin.html#priority--
 @Pseudo @Mixin(value = TilePool.class, remap = false, priority = Integer.MAX_VALUE)
 public abstract class TilePoolMixin {
     @Shadow @Final private static int CHARGE_EFFECT_EVENT;
