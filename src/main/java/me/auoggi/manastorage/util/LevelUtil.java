@@ -20,9 +20,4 @@ public class LevelUtil {
         return level != null && pos != null ? level.getExistingBlockEntity(pos) : null;
         //return level != null && pos != null ? level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE) : null;
     }
-
-    @Deprecated
-    public static boolean isLoaded(BasicImporterBlockEntity entity) {
-        return entity != null && System.currentTimeMillis() - entity.lastTickMillis <= 2500;
-    }
 }
