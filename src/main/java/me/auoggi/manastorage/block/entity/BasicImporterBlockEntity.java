@@ -8,11 +8,13 @@ import me.auoggi.manastorage.block.BasicImporterBlock;
 import me.auoggi.manastorage.packet.EnergySyncS2C;
 import me.auoggi.manastorage.packet.ManaSyncS2C;
 import me.auoggi.manastorage.screen.BasicImporterMenu;
+import me.auoggi.manastorage.util.ManaStorageCoreClientData;
 import me.auoggi.manastorage.util.ModEnergyStorage;
 import me.auoggi.manastorage.util.ModItemStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -134,8 +136,10 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void tick(Level level, BlockPos blockPos, BlockState blockState) {
-        ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), getBlockPos()));
-        ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), getBlockPos()));
+        ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), blockPos));
+        ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), blockPos));
+
+        ManaStorage.pendingCoreServerDataMap.put(GlobalPos.of(level.dimension(), blockPos), new ManaStorageCoreClientData(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, true) >= ManaStorage.basicEnergyUsage, manaStorage.getManaStoredFraction()));
 
         if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
             importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.importerSpeed, true), false), false);
