@@ -5,10 +5,8 @@ import me.auoggi.manastorage.ModCapabilities;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import me.auoggi.manastorage.util.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -26,23 +24,17 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.item.ICoordBoundItem;
 import vazkii.botania.api.mana.ManaBarTooltip;
-import vazkii.botania.xplat.IXplatAbstractions;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
-//TODO Fuck Minecraft.getInstance.level as it doesn't work if in another dimension than bounded GlobalPos
 //TODO Replace BasicImporterBlockEntity with CoreEntity when it is added
 public class ManaStorageTablet extends Item {
     public ManaStorageTablet(Properties p_41383_) {
@@ -70,7 +62,7 @@ public class ManaStorageTablet extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> stacks, @NotNull TooltipFlag flags) {
         if(isBound(stack)) {
-            if(isBoundLoaded(stack, Minecraft.getInstance().level)) {
+            if(isBoundLoaded(stack, null)) {
                 if(isBoundPowered(stack, null)) {
                     stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.GlobalPos(bound(stack))).withStyle(ChatFormatting.GRAY));
                 } else {
@@ -94,14 +86,16 @@ public class ManaStorageTablet extends Item {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
-        if(!level.isClientSide && getBound(stack, level.getServer()) == null) stack.getOrCreateTag().remove("bound");
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if(!level.isClientSide) {
+            //isBoundLoaded(stack, level.getServer());
+        }
     }
 
     private void bind(ItemStack stack, BasicImporterBlockEntity entity) {
         if(entity.getLevel() != null) {
-            GlobalPos position = GlobalPos.of(entity.getLevel().dimension(), entity.getBlockPos());
-            Tag nbt = GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, position).get().orThrow();
+            GlobalPos pos = GlobalPos.of(entity.getLevel().dimension(), entity.getBlockPos());
+            Tag nbt = GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos).get().orThrow();
             stack.getOrCreateTag().put("bound", nbt);
         }
     }
@@ -119,10 +113,10 @@ public class ManaStorageTablet extends Item {
     }
 
     private BasicImporterBlockEntity getBound(ItemStack stack, MinecraftServer server) {
-        if(isBound(stack)) {
+        if(isBound(stack) && server != null) {
             GlobalPos pos = bound(stack);
-            Level level = server != null ? server.getLevel(pos.dimension()) : Minecraft.getInstance().level;
-            if(level.getChunkAt(pos.pos()).getBlockEntity(pos.pos(), LevelChunk.EntityCreationType.IMMEDIATE) instanceof BasicImporterBlockEntity entity) {
+            Level level = server.getLevel(pos.dimension());
+            if(LevelUtil.getBlockEntity(level, pos.pos()) instanceof BasicImporterBlockEntity entity) {
                 return entity;
             }
             return null;
@@ -130,20 +124,31 @@ public class ManaStorageTablet extends Item {
         return null;
     }
 
-    private boolean isBoundLoaded(ItemStack stack, Level level) {
-        return isBound(stack) && level.isLoaded(bound(stack).pos());
+    private boolean isBoundLoaded(ItemStack stack, MinecraftServer server) {
+        if(isBound(stack)) {
+            GlobalPos pos = bound(stack);
+            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.coreClientDataMap.containsKey(pos);
+        }
+        return false;
     }
 
     private boolean isBoundPowered(ItemStack stack, MinecraftServer server) {
         if(isBound(stack)) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
-            return bound != null && bound.getEnergyStorage().getEnergyStored() >= ManaStorage.basicEnergyUsage;
+            if(server != null) {
+                BasicImporterBlockEntity bound = getBound(stack, server);
+                return bound != null && bound.getEnergyStorage().getEnergyStored() >= ManaStorage.basicEnergyUsage;
+            } else {
+                GlobalPos pos = bound(stack);
+                if(ManaStorage.coreClientDataMap.containsKey(pos)) {
+                    return ManaStorage.coreClientDataMap.get(pos).powered();
+                }
+            }
         }
         return false;
     }
 
     private boolean isBoundLoadedAndPowered(ItemStack stack, MinecraftServer server) {
-        return isBound(stack) && isBoundLoaded(stack, server != null ? server.getLevel(bound(stack).dimension()) : Minecraft.getInstance().level) && isBoundPowered(stack, server);
+        return isBoundLoaded(stack, server) && isBoundPowered(stack, server);
     }
 
     public class ManaItem implements ModManaItem {
@@ -208,13 +213,23 @@ public class ManaStorageTablet extends Item {
         @Override
         public BlockPos getBinding(Level level) {
             GlobalPos pos = bound(stack);
-            return pos.dimension() == level.dimension() ? pos.pos() : null;
+            return pos != null && pos.dimension() == level.dimension() ? pos.pos() : null;
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private float manaFraction(ItemStack stack) {
+        GlobalPos pos = bound(stack);
+        if(ManaStorage.coreClientDataMap.containsKey(pos)) {
+            return ManaStorage.coreClientDataMap.get(pos).powered() ? (float) ManaStorage.coreClientDataMap.get(pos).manaFraction() : 0;
+        }
+        return 0;
     }
 
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
-        return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip((float) getBound(stack, null).getManaStorage().getManaStoredFraction())) : Optional.empty();
+        return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip(manaFraction(stack))) : Optional.empty();
+        //return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip((float) getBound(stack, ).getManaStorage().getManaStoredFraction())) : Optional.empty();
     }
 
     @Override
@@ -224,11 +239,13 @@ public class ManaStorageTablet extends Item {
 
     @Override
     public int getBarWidth(@NotNull ItemStack stack) {
-        return Math.round(13 * (float) getBound(stack, null).getManaStorage().getManaStoredFraction());
+        return Math.round(13 * manaFraction(stack));
+        //return Math.round(13 * (float) getBound(stack, ).getManaStorage().getManaStoredFraction());
     }
 
     @Override
     public int getBarColor(@NotNull ItemStack stack) {
-        return Mth.hsvToRgb((float) getBound(stack, null).getManaStorage().getManaStoredFraction() / 3.0F, 1.0F, 1.0F);
+        return Mth.hsvToRgb(manaFraction(stack) / 3.0F, 1.0F, 1.0F);
+        //return Mth.hsvToRgb((float) getBound(stack, ).getManaStorage().getManaStoredFraction() / 3.0F, 1.0F, 1.0F);
     }
 }

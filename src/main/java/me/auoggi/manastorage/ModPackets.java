@@ -1,6 +1,7 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.packet.EnergySyncS2C;
+import me.auoggi.manastorage.packet.ManaStorageCoreClientDataS2C;
 import me.auoggi.manastorage.packet.ManaSyncS2C;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,6 +39,12 @@ public class ModPackets {
                 .decoder(ManaSyncS2C::new)
                 .encoder(ManaSyncS2C::toBytes)
                 .consumer(ManaSyncS2C::handle)
+                .add();
+
+        net.messageBuilder(ManaStorageCoreClientDataS2C.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ManaStorageCoreClientDataS2C::new)
+                .encoder(ManaStorageCoreClientDataS2C::toBytes)
+                .consumer(ManaStorageCoreClientDataS2C::handle)
                 .add();
     }
 
