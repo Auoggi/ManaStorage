@@ -7,6 +7,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +18,11 @@ public class ModCapabilityProvider implements ICapabilityProvider {
     public ModCapabilityProvider(ICapabilityProvider parent, List<ModCapability> capabilities) {
         this.parent = parent;
         this.capabilities = capabilities;
+    }
+
+    public ModCapabilityProvider(ICapabilityProvider parent, ModCapability capability) {
+        this.parent = parent;
+        this.capabilities = Collections.singletonList(capability);
     }
 
     @NotNull
