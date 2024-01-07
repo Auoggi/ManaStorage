@@ -161,6 +161,30 @@ public class ManaStorageTablet extends Item {
         }
 
         @Override
+        public int getManaStored(MinecraftServer server) {
+            BasicImporterBlockEntity bound = getBound(stack, server);
+            return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getManaStored() : 0;
+        }
+
+        @Override
+        public double getManaStoredFraction(MinecraftServer server) {
+            BasicImporterBlockEntity bound = getBound(stack, server);
+            return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getManaStoredFraction() : 0;
+        }
+
+        @Override
+        public int getFullCapacity(MinecraftServer server) {
+            BasicImporterBlockEntity bound = getBound(stack, server);
+            return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
+        }
+
+        @Override
+        public int getRemainingCapacity(MinecraftServer server) {
+            BasicImporterBlockEntity bound = getBound(stack, server);
+            return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getRemainingCapacity() : 0;
+        }
+
+        @Override
         public boolean isEmpty(MinecraftServer server) {
             BasicImporterBlockEntity bound = getBound(stack, server);
             return !isBoundLoadedAndPowered(stack, server) || bound == null || bound.getManaStorage().isEmpty();
@@ -191,7 +215,7 @@ public class ManaStorageTablet extends Item {
 
         @Override
         public boolean canReceiveManaFromItem(ItemStack otherStack, MinecraftServer server) {
-            return false;
+            return isBoundLoadedAndPowered(stack, server);
         }
 
         @Override
@@ -201,7 +225,7 @@ public class ManaStorageTablet extends Item {
 
         @Override
         public boolean canExportManaToItem(ItemStack otherStack, MinecraftServer server) {
-            return false;
+            return isBoundLoadedAndPowered(stack, server);
         }
     }
 
