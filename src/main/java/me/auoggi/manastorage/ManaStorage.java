@@ -8,6 +8,8 @@ import me.auoggi.manastorage.util.ManaStorageCoreClientData;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,15 +20,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //TODO give gui texture outline of Network Linker
 @Mod("manastorage")
 public class ManaStorage {
     public static final String MODID = "manastorage";
+
+    private static final List<GlobalPos> loadedBlockEntities = new ArrayList<>();
 
     public static final List<GlobalPos> pendingLoadedBlockEntities = new ArrayList<>();
 
@@ -67,22 +68,20 @@ public class ManaStorage {
 
     @SubscribeEvent
     public void tick(@NotNull TickEvent.WorldTickEvent event) {
-        if(!event.world.isClientSide && event.world instanceof ServerLevel serverLevel) {
-            List<GlobalPos> loadedBlockEntities = new ArrayList<>();
-
+        //Make sure we only execute once and at the end of every tick and only when we are on the server
+        if(event.phase.equals(TickEvent.Phase.END) && event.world instanceof ServerLevel serverLevel && serverLevel.dimension().toString().equals("ResourceKey[minecraft:dimension / minecraft:overworld]")) {
             if(!pendingLoadedBlockEntities.isEmpty()) {
                 loadedBlockEntities.addAll(pendingLoadedBlockEntities);
                 pendingLoadedBlockEntities.clear();
             }
-
             if(!pendingCoreServerDataMap.isEmpty()) {
                 coreServerDataMap.putAll(pendingCoreServerDataMap);
                 pendingCoreServerDataMap.clear();
             }
 
-            Map<GlobalPos, ManaStorageCoreClientData> tempCoreServerDataMap = coreServerDataMap; //Create temp map because removing elements from map while iterating over it is not possible
+            Map<GlobalPos, ManaStorageCoreClientData> tempCoreServerDataMap = coreServerDataMap; //Create a temporary map because removing elements from a map while iterating over it is unsafe
 
-            for(Map.Entry<GlobalPos, ManaStorageCoreClientData> entry : coreClientDataMap.entrySet()) {
+            for(Map.Entry<GlobalPos, ManaStorageCoreClientData> entry : coreServerDataMap.entrySet()) {
                 ServerLevel level = serverLevel.getServer().getLevel(entry.getKey().dimension());
                 if(level == null) continue;
 
@@ -91,6 +90,7 @@ public class ManaStorage {
                 }
             }
             coreServerDataMap = tempCoreServerDataMap;
+            loadedBlockEntities.clear();
             ModPackets.sendToClients(new ManaStorageCoreClientDataS2C(coreServerDataMap));
         }
     }

@@ -139,7 +139,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), blockPos));
         ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), blockPos));
 
-        ManaStorage.pendingCoreServerDataMap.put(GlobalPos.of(level.dimension(), blockPos), new ManaStorageCoreClientData(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, true) >= ManaStorage.basicEnergyUsage, manaStorage.getManaStoredFraction()));
+        ManaStorage.pendingCoreServerDataMap.put(GlobalPos.of(level.dimension(), blockPos), ManaStorageCoreClientData.of(this));
 
         if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
             importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.importerSpeed, true), false), false);

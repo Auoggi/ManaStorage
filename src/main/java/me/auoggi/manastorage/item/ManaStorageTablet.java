@@ -31,7 +31,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.item.ICoordBoundItem;
+import vazkii.botania.api.mana.IManaItem;
 import vazkii.botania.api.mana.ManaBarTooltip;
+import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
@@ -86,9 +88,9 @@ public class ManaStorageTablet extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if(!level.isClientSide) {
-            //isBoundLoaded(stack, level.getServer());
+    public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int slot, boolean selected) {
+        if(!level.isClientSide && isBoundLoaded(stack, level.getServer())) {
+            ;
         }
     }
 
@@ -226,10 +228,15 @@ public class ManaStorageTablet extends Item {
         return 0;
     }
 
+    //TODO Fix, doesn't render for some reason
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
-        return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip(manaFraction(stack))) : Optional.empty();
-        //return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip((float) getBound(stack, ).getManaStorage().getManaStoredFraction())) : Optional.empty();
+        return Optional.of(new ManaBarTooltip(manaFraction(stack)));
+        /*if(isBoundLoadedAndPowered(stack, null)) {
+            System.out.println("hihi");
+            return Optional.of(new ManaBarTooltip(manaFraction(stack)));
+        }
+        return Optional.empty();*/
     }
 
     @Override
@@ -240,12 +247,10 @@ public class ManaStorageTablet extends Item {
     @Override
     public int getBarWidth(@NotNull ItemStack stack) {
         return Math.round(13 * manaFraction(stack));
-        //return Math.round(13 * (float) getBound(stack, ).getManaStorage().getManaStoredFraction());
     }
 
     @Override
     public int getBarColor(@NotNull ItemStack stack) {
         return Mth.hsvToRgb(manaFraction(stack) / 3.0F, 1.0F, 1.0F);
-        //return Mth.hsvToRgb((float) getBound(stack, ).getManaStorage().getManaStoredFraction() / 3.0F, 1.0F, 1.0F);
     }
 }
