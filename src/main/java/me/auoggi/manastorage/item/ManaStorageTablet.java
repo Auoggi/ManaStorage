@@ -31,11 +31,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.item.ICoordBoundItem;
-import vazkii.botania.api.mana.IManaItem;
 import vazkii.botania.api.mana.ManaBarTooltip;
-import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 //TODO Replace BasicImporterBlockEntity with CoreEntity when it is added
 public class ManaStorageTablet extends Item {
@@ -89,8 +89,8 @@ public class ManaStorageTablet extends Item {
 
     @Override
     public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int slot, boolean selected) {
-        if(!level.isClientSide && isBoundLoaded(stack, level.getServer())) {
-            ;
+        if(!level.isClientSide && isBoundLoaded(stack, level.getServer()) && getBound(stack, level.getServer()) == null) {
+            stack.getOrCreateTag().remove("bound");
         }
     }
 
@@ -228,15 +228,9 @@ public class ManaStorageTablet extends Item {
         return 0;
     }
 
-    //TODO Fix, doesn't render for some reason
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
-        return Optional.of(new ManaBarTooltip(manaFraction(stack)));
-        /*if(isBoundLoadedAndPowered(stack, null)) {
-            System.out.println("hihi");
-            return Optional.of(new ManaBarTooltip(manaFraction(stack)));
-        }
-        return Optional.empty();*/
+        return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip(manaFraction(stack))) : Optional.empty();
     }
 
     @Override
