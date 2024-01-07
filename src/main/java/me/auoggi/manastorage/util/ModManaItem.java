@@ -8,6 +8,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nullable;
 
 public interface ModManaItem {
+    int getManaStored(MinecraftServer server);
+
+    double getManaStoredFraction(MinecraftServer server);
+
+    int getFullCapacity(MinecraftServer server);
+
+    int getRemainingCapacity(MinecraftServer server);
+
     boolean isEmpty(MinecraftServer server);
 
     boolean isFull(MinecraftServer server);

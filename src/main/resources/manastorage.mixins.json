@@ -6,6 +6,7 @@
   "refmap": "me.auoggi.manastorage.refmap.json",
   "mixins": [
     "LevelMixin",
+    "ManaItemHandlerImplMixin",
     "TilePoolMixin"
   ],
   "injectors": {
