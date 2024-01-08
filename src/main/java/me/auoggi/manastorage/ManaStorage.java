@@ -25,6 +25,7 @@ import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
+//TODO finish converting from int to long
 //TODO give gui texture outline of Network Linker
 @Mod("manastorage")
 public class ManaStorage {

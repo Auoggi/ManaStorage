@@ -161,7 +161,7 @@ public class ManaStorageTablet extends Item {
         }
 
         @Override
-        public int getManaStored(MinecraftServer server) {
+        public long getManaStored(MinecraftServer server) {
             BasicImporterBlockEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getManaStored() : 0;
         }
@@ -173,13 +173,13 @@ public class ManaStorageTablet extends Item {
         }
 
         @Override
-        public int getFullCapacity(MinecraftServer server) {
+        public long getFullCapacity(MinecraftServer server) {
             BasicImporterBlockEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
         }
 
         @Override
-        public int getRemainingCapacity(MinecraftServer server) {
+        public long getRemainingCapacity(MinecraftServer server) {
             BasicImporterBlockEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getRemainingCapacity() : 0;
         }
@@ -197,13 +197,13 @@ public class ManaStorageTablet extends Item {
         }
 
         @Override
-        public int receiveMana(int mana, boolean simulate, MinecraftServer server) {
+        public long receiveMana(long mana, boolean simulate, MinecraftServer server) {
             if(!isBoundLoadedAndPowered(stack, server)) return 0;
             return getBound(stack, server).getManaStorage().receiveMana(mana, simulate);
         }
 
         @Override
-        public int extractMana(int mana, boolean simulate, MinecraftServer server) {
+        public long extractMana(long mana, boolean simulate, MinecraftServer server) {
             if(!isBoundLoadedAndPowered(stack, server)) return 0;
             return getBound(stack, server).getManaStorage().extractMana(mana, simulate);
         }
@@ -264,7 +264,7 @@ public class ManaStorageTablet extends Item {
 
     @Override
     public int getBarWidth(@NotNull ItemStack stack) {
-        return Math.round(13 * manaFraction(stack));
+        return (int) Math.ceil(13 * manaFraction(stack));
     }
 
     @Override

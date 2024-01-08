@@ -60,14 +60,14 @@ public abstract class TilePoolMixin {
                         if(self.getCurrentMana() > 0 && !manaItem.isFull(level.getServer())) {
                             int mana = Math.min(self.getCurrentMana(), transferRate);
 
-                            self.receiveMana(-manaItem.receiveMana(mana, false, level.getServer()));
+                            self.receiveMana((int) -manaItem.receiveMana(mana, false, level.getServer()));
                             didSomething = true;
                         }
                     } else {
                         if(!self.isFull() && !manaItem.isEmpty(level.getServer())) {
                             int mana = Math.min(self.manaCap - self.getCurrentMana(), transferRate);
 
-                            self.receiveMana(manaItem.extractMana(mana, false, level.getServer()));
+                            self.receiveMana((int) manaItem.extractMana(mana, false, level.getServer()));
                             didSomething = true;
                         }
                     }

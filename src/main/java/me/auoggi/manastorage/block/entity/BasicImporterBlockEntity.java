@@ -80,7 +80,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
-        tag.putInt("Mana", manaStorage.getManaStored());
+        tag.putLong("Mana", manaStorage.getManaStored());
         tag.put("Inventory", itemStorage.serializeNBT());
         tag.putInt("Energy", energyStorage.getEnergyStored());
 
@@ -142,7 +142,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         ManaStorage.pendingCoreServerDataMap.put(GlobalPos.of(level.dimension(), blockPos), ManaStorageCoreClientData.of(this));
 
         if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
-            importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.importerSpeed, true), false), false);
+            importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.basicSpeed, true), false), false);
     }
 
     public void dropContents() {
@@ -154,18 +154,18 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         Containers.dropContents(level, worldPosition, inventory);
     }
 
-    public int importMana(Level level, BlockPos blockPos, BlockState blockState, int amount, boolean simulate) {
+    public long importMana(Level level, BlockPos blockPos, BlockState blockState, long amount, boolean simulate) {
         BlockEntity facing = level.getBlockEntity(blockPos.relative(blockState.getValue(BasicImporterBlock.FACING)));
         if(facing instanceof TileEntityGeneratingFlower flower) {
             amount = Math.min(flower.getMana(), amount);
             if(!simulate) {
-                flower.addMana(-amount);
+                flower.addMana((int) -amount);
                 flower.sync();
             }
             return amount;
         } else if(facing instanceof TilePool pool) {
             amount = Math.min(pool.getCurrentMana(), amount);
-            if(!simulate) pool.receiveMana(-amount);
+            if(!simulate) pool.receiveMana((int) -amount);
             return amount;
         }
 

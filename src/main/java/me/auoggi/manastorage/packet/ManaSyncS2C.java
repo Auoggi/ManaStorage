@@ -9,21 +9,21 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class ManaSyncS2C {
-    private final int mana;
+    private final long mana;
     private final BlockPos blockPos;
 
-    public ManaSyncS2C(int mana, BlockPos blockPos) {
+    public ManaSyncS2C(long mana, BlockPos blockPos) {
         this.mana = mana;
         this.blockPos = blockPos;
     }
 
     public ManaSyncS2C(FriendlyByteBuf friendlyByteBuf) {
-        mana = friendlyByteBuf.readInt();
+        mana = friendlyByteBuf.readLong();
         blockPos = friendlyByteBuf.readBlockPos();
     }
 
     public void toBytes(FriendlyByteBuf friendlyByteBuf) {
-        friendlyByteBuf.writeInt(mana);
+        friendlyByteBuf.writeLong(mana);
         friendlyByteBuf.writeBlockPos(blockPos);
     }
 

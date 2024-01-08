@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import vazkii.botania.api.mana.IManaItem;
 import vazkii.botania.common.impl.mana.ManaItemHandlerImpl;
 import vazkii.botania.xplat.IXplatAbstractions;
 
@@ -29,6 +30,7 @@ public abstract class ManaItemHandlerImplMixin {
         for(Map.Entry<ModManaItem, Integer> entry : manastorage$toRemove.entrySet()) {
             entry.getKey().extractMana(entry.getValue(), false, server);
         }
+        manastorage$toRemove.clear();
     }
 
     @Unique
@@ -48,18 +50,19 @@ public abstract class ManaItemHandlerImplMixin {
         return toReturn;
     }
 
-    @Inject(method = "requestMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    @Inject(method = "requestMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void requestMana(ItemStack stack, Player player, int manaToGet, boolean remove, CallbackInfoReturnable<Integer> cir, List<ItemStack> items, List<ItemStack> acc, int manaReceived) {
         MinecraftServer server = player.getServer();
         if(server != null) {
             for(ItemStack itemStack : manastorage$getModManaItems(player)) {
                 if(itemStack == stack) continue;
                 ModManaItem manaItem = ModManaItem.of(itemStack);
-                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || !IXplatAbstractions.INSTANCE.findManaItem(stack).canReceiveManaFromItem(itemStack)) {
+                IManaItem requester = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || (requester != null && !requester.canReceiveManaFromItem(itemStack))) {
                     continue;
                 }
 
-                int mana = Math.min(manaToGet - manaReceived, manaItem.getManaStored(server));
+                int mana = (int) Math.min(manaToGet - manaReceived, manaItem.getManaStored(server));
 
                 if(remove) manaItem.extractMana(mana, false, server);
 
@@ -71,18 +74,19 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    @Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    @Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0, shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void requestManaExact0(ItemStack stack, Player player, int manaToGet, boolean remove, CallbackInfoReturnable<Boolean> cir, List<ItemStack> items, List<ItemStack> acc, int manaReceived) {
         MinecraftServer server = player.getServer();
         if(server != null) {
             for(ItemStack itemStack : manastorage$getModManaItems(player)) {
                 if(itemStack == stack) continue;
                 ModManaItem manaItem = ModManaItem.of(itemStack);
-                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || !IXplatAbstractions.INSTANCE.findManaItem(stack).canReceiveManaFromItem(itemStack)) {
+                IManaItem requester = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || (requester != null && !requester.canReceiveManaFromItem(itemStack))) {
                     continue;
                 }
 
-                int mana = Math.min(manaToGet - manaReceived, manaItem.getManaStored(server));
+                int mana = (int) Math.min(manaToGet - manaReceived, manaItem.getManaStored(server));
 
                 if(remove) manastorage$toRemove.put(manaItem, mana);
 
@@ -97,24 +101,25 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    @Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 1, shift = At.Shift.BEFORE))
+    @Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 1, shift = At.Shift.BY, by = -2))
     private void requestManaExact1(ItemStack stack, Player player, int manaToGet, boolean remove, CallbackInfoReturnable<Boolean> cir) {
         MinecraftServer server = player.getServer();
         if(server != null) manastorage$clearToRemove(server);
     }
 
-    @Inject(method = "dispatchMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "dispatchMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), cancellable = true)
     private void dispatchMana(ItemStack stack, Player player, int manaToSend, boolean add, CallbackInfoReturnable<Integer> cir) {
         MinecraftServer server = player.getServer();
         if(server != null) {
             for(ItemStack itemStack : manastorage$getModManaItems(player)) {
                 if(itemStack == stack) continue;
                 ModManaItem manaItem = ModManaItem.of(itemStack);
-                if(manaItem == null || !manaItem.canReceiveManaFromItem(stack, player.getServer()) || !IXplatAbstractions.INSTANCE.findManaItem(stack).canExportManaToItem(itemStack)) {
+                IManaItem sender = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canReceiveManaFromItem(stack, player.getServer()) || (sender != null && !sender.canExportManaToItem(itemStack))) {
                     continue;
                 }
 
-                int mana = Math.min(manaItem.getRemainingCapacity(server), manaToSend);
+                int mana = (int) Math.min(manaItem.getRemainingCapacity(server), manaToSend);
 
                 if(add) manaItem.receiveMana(mana, false, server);
 
@@ -124,18 +129,19 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    @Inject(method = "dispatchManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "dispatchManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), cancellable = true)
     private void dispatchManaExact(ItemStack stack, Player player, int manaToSend, boolean add, CallbackInfoReturnable<Boolean> cir) {
         MinecraftServer server = player.getServer();
         if(server != null) {
             for(ItemStack itemStack : manastorage$getModManaItems(player)) {
                 if(itemStack == stack) continue;
                 ModManaItem manaItem = ModManaItem.of(itemStack);
-                if(manaItem == null || !manaItem.canReceiveManaFromItem(stack, player.getServer()) || !IXplatAbstractions.INSTANCE.findManaItem(stack).canExportManaToItem(itemStack)) {
+                IManaItem sender = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canReceiveManaFromItem(stack, player.getServer()) || (sender != null && !sender.canExportManaToItem(itemStack))) {
                     continue;
                 }
 
-                int mana = Math.min(manaItem.getRemainingCapacity(server), manaToSend);
+                int mana = (int) Math.min(manaItem.getRemainingCapacity(server), manaToSend);
 
                 if(mana == manaToSend) {
                     if(add) manaItem.receiveMana(mana, false, server);
@@ -147,18 +153,19 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    @Inject(method = "getInvocationCountForTool", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    @Inject(method = "getInvocationCountForTool", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void getInvocationCountForTool(ItemStack stack, Player player, int manaToGet, CallbackInfoReturnable<Integer> cir, int cost, int invocations) {
         MinecraftServer server = player.getServer();
         if(server != null) {
             for(ItemStack itemStack : manastorage$getModManaItems(player)) {
                 if(itemStack == stack) continue;
                 ModManaItem manaItem = ModManaItem.of(itemStack);
-                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || !IXplatAbstractions.INSTANCE.findManaItem(stack).canReceiveManaFromItem(itemStack) || cost == 0) {
+                IManaItem requester = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || (requester != null && !requester.canReceiveManaFromItem(itemStack)) || cost == 0) {
                     continue;
                 }
 
-                int mana = manaItem.getManaStored(server);
+                int mana = (int) manaItem.getManaStored(server);
 
                 if(mana > cost) {
                     invocations += mana / cost;

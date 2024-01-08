@@ -1,10 +1,10 @@
 package me.auoggi.manastorage.util;
 
 public abstract class ModManaStorage {
-    private int mana = 0;
-    private final int capacity;
+    private long mana = 0;
+    private final long capacity;
 
-    public int getManaStored() {
+    public long getManaStored() {
         return mana;
     }
 
@@ -12,11 +12,11 @@ public abstract class ModManaStorage {
         return (double) mana / (double) capacity;
     }
 
-    public int getFullCapacity() {
+    public long getFullCapacity() {
         return capacity;
     }
 
-    public int getRemainingCapacity() {
+    public long getRemainingCapacity() {
         return capacity - mana;
     }
 
@@ -28,11 +28,11 @@ public abstract class ModManaStorage {
         return mana >= capacity;
     }
 
-    public ModManaStorage(int capacity) {
+    public ModManaStorage(long capacity) {
         this.capacity = capacity;
     }
 
-    public int receiveMana(int mana, boolean simulate) {
+    public long receiveMana(long mana, boolean simulate) {
         mana = Math.abs(Math.min(getRemainingCapacity(), mana));
         if(!simulate) {
             this.mana += mana;
@@ -42,7 +42,7 @@ public abstract class ModManaStorage {
         return mana;
     }
 
-    public int extractMana(int mana, boolean simulate) {
+    public long extractMana(long mana, boolean simulate) {
         mana = Math.abs(Math.min(this.mana, mana));
         if(!simulate) {
             this.mana -= mana;
@@ -53,7 +53,7 @@ public abstract class ModManaStorage {
     }
 
     //Do not use without calling onManaChanged(), except for syncing between server and client.
-    public void setMana(int mana) {
+    public void setMana(long mana) {
         this.mana = Math.max(0, mana);
     }
 
