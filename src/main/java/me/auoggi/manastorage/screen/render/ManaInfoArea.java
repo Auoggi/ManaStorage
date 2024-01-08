@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
+import me.auoggi.manastorage.util.NumberUtil;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
@@ -27,7 +28,7 @@ public class ManaInfoArea extends GuiComponent {
     }
 
     public Component getTooltip() {
-        return new TextComponent(mana.getManaStored() + "/" + mana.getFullCapacity() + " Mana");
+        return new TextComponent(NumberUtil.toMagnitude(mana.getManaStored()) + " / " + NumberUtil.toMagnitude(mana.getFullCapacity()) + " Mana");
     }
 
     public void draw(PoseStack poseStack) {
@@ -35,7 +36,7 @@ public class ManaInfoArea extends GuiComponent {
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.setShaderTexture(0, texture);
 
-        int scaledHeight = (int) (rect.getHeight() * mana.getManaStoredFraction());
+        int scaledHeight = (int) Math.ceil(rect.getHeight() * mana.getManaStoredFraction());
         blit(poseStack, rect.getX(), rect.getY() + rect.getHeight() - scaledHeight, 15, rect.getHeight() - scaledHeight, rect.getWidth(), scaledHeight);
     }
 }
