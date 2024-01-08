@@ -8,21 +8,21 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nullable;
 
 public interface ModManaItem {
-    int getManaStored(MinecraftServer server);
+    long getManaStored(MinecraftServer server);
 
     double getManaStoredFraction(MinecraftServer server);
 
-    int getFullCapacity(MinecraftServer server);
+    long getFullCapacity(MinecraftServer server);
 
-    int getRemainingCapacity(MinecraftServer server);
+    long getRemainingCapacity(MinecraftServer server);
 
     boolean isEmpty(MinecraftServer server);
 
     boolean isFull(MinecraftServer server);
 
-    int receiveMana(int mana, boolean simulate, MinecraftServer server);
+    long receiveMana(long mana, boolean simulate, MinecraftServer server);
 
-    int extractMana(int mana, boolean simulate, MinecraftServer server);
+    long extractMana(long mana, boolean simulate, MinecraftServer server);
 
     boolean canReceiveManaFromPool(BlockEntity pool, MinecraftServer server);
 
