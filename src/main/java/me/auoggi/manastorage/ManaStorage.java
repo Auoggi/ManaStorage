@@ -36,10 +36,9 @@ public class ManaStorage {
 
     public static final Map<GlobalPos, ManaStorageCoreClientData> pendingCoreServerDataMap = new HashMap<>();
 
-    public static final int importerSpeed = 400;
-    public static final int exporterSpeed = 800;
-    public static final int basicEnergyUsage = 1600;
-    public static final int advancedEnergyUsage = 16000;
+    public static final int basicSpeed = 320;
+    public static final int basicEnergyUsage = 16000;
+    public static final int advancedEnergyUsage = 160000;
     public static final int basicEnergyCapacity = basicEnergyUsage * 100;
     public static final int advancedEnergyCapacity = advancedEnergyUsage * 100;
 
