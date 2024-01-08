@@ -147,9 +147,23 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    //TODO Finish this
-    @Inject(method = "getInvocationCountForTool", at = @At(value = "HEAD"), cancellable = true)
-    private void getInvocationCountForTool(ItemStack stack, Player player, int manaToGet, CallbackInfoReturnable<Integer> cir) {
+    @Inject(method = "getInvocationCountForTool", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    private void getInvocationCountForTool(ItemStack stack, Player player, int manaToGet, CallbackInfoReturnable<Integer> cir, int cost, int invocations) {
+        MinecraftServer server = player.getServer();
+        if(server != null) {
+            for(ItemStack itemStack : manastorage$getModManaItems(player)) {
+                if(itemStack == stack) continue;
+                ModManaItem manaItem = ModManaItem.of(itemStack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || !IXplatAbstractions.INSTANCE.findManaItem(stack).canReceiveManaFromItem(itemStack) || cost == 0) {
+                    continue;
+                }
 
+                int mana = manaItem.getManaStored(server);
+
+                if(mana > cost) {
+                    invocations += mana / cost;
+                }
+            }
+        }
     }
 }
