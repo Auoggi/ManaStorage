@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[40,)"
-license="All-Rights-Reserved"
+license="Apache-2.0"
 [[mods]]
 modId="manastorage"
 version="${mod_version}"
