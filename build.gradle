@@ -101,7 +101,7 @@ tasks.named('processResources', ProcessResources).configure {
             minecraft_version: "1.18.2", minecraft_version_range: "[1.18.2,1.19)",
             forge_version: forge_version, forge_version_range: "[40,)",
             loader_version_range: "[40,)",
-            mod_id: "manastorage", mod_name: "ManaStorage", mod_license: "All-Rights-Reserved", mod_version: mod_version,
+            mod_id: "manastorage", mod_name: "ManaStorage", mod_license: "Apache-2.0", mod_version: mod_version,
             mod_authors: "Auoggi", mod_description: "Adds a storage system to store Mana",
     ]
 
