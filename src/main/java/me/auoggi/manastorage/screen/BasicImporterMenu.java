@@ -35,35 +35,25 @@ public class BasicImporterMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> addSlot(new SlotItemHandler(handler, 0, 80, 37)));
     }
 
-    //Credit to: diesieben07 | https://github.com/diesieben07/SevenCommons
     private static final int blockEntitySlotCount = 1;
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
-        Slot sourceSlot = slots.get(index);
-        if(!sourceSlot.hasItem()) return ItemStack.EMPTY;
-        ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        Slot slot = slots.get(index);
+        if(!slot.hasItem()) return ItemStack.EMPTY;
+        ItemStack sourceStack = slot.getItem();
 
-        if(index < 36) {
-            if(!moveItemStackTo(sourceStack, 36, 36 + blockEntitySlotCount, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else if(index < 36 + blockEntitySlotCount) {
-            if(!moveItemStackTo(sourceStack, 0, 36, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            System.out.println("Invalid slotIndex:" + index);
+        if((index < 36 && !moveItemStackTo(sourceStack, 36, 36 + blockEntitySlotCount, false)) || (index < 36 + blockEntitySlotCount && !moveItemStackTo(sourceStack, 0, 36, false)) || index >= 36 + blockEntitySlotCount) {
             return ItemStack.EMPTY;
         }
+
         if(sourceStack.getCount() == 0) {
-            sourceSlot.set(ItemStack.EMPTY);
+            slot.set(ItemStack.EMPTY);
         } else {
-            sourceSlot.setChanged();
+            slot.setChanged();
         }
-        sourceSlot.onTake(playerIn, sourceStack);
-        return copyOfSourceStack;
+        slot.onTake(player, sourceStack);
+        return sourceStack.copy();
     }
 
     @Override
