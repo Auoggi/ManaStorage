@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
-import me.auoggi.manastorage.util.NumberUtil;
+import me.auoggi.manastorage.util.ToString;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
@@ -28,7 +28,7 @@ public class ManaInfoArea extends GuiComponent {
     }
 
     public Component getTooltip() {
-        return new TextComponent(NumberUtil.toMagnitude(mana.getManaStored()) + " / " + NumberUtil.toMagnitude(mana.getFullCapacity()) + " Mana");
+        return new TextComponent(ToString.magnitude(mana.getManaStored()) + " / " + ToString.magnitude(mana.getFullCapacity()) + " Mana");
     }
 
     public void draw(PoseStack poseStack) {
