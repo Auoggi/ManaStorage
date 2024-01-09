@@ -8,10 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import vazkii.botania.api.mana.IManaItem;
@@ -51,8 +48,9 @@ public abstract class ManaItemHandlerImplMixin {
         return toReturn;
     }
 
-    //TODO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    @ModifyVariable(method = "requestManaExact", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"), to = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0)), at = @At(value = "STORE"), ordinal = 0, print = true)
+    //TODO this is how to do it
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyVariable(method = "requestManaExact", at = @At(value = "STORE", ordinal = 0), name = "manaReceived")
     private int manaReceived(int value) {
         System.out.println(value);
         return 1000000000;
