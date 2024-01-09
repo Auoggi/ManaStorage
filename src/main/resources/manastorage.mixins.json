@@ -6,6 +6,7 @@
   "refmap": "me.auoggi.manastorage.refmap.json",
   "mixins": [
     "EntityManaSparkMixin",
+    "HUDHandlerMixin",
     "LevelMixin",
     "ManaItemHandlerImplMixin",
     "TilePoolMixin"
