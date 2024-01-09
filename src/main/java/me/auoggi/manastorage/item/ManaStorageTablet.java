@@ -66,7 +66,7 @@ public class ManaStorageTablet extends Item {
         if(isBound(stack)) {
             if(isBoundLoaded(stack, null)) {
                 if(isBoundPowered(stack, null)) {
-                    stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.GlobalPos(bound(stack))).withStyle(ChatFormatting.GRAY));
+                    stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.globalPos(bound(stack))).withStyle(ChatFormatting.GRAY));
                 } else {
                     stacks.add(new TranslatableComponent("hovertext.manastorage.bound_not_powered").withStyle(ChatFormatting.GRAY));
                 }
@@ -244,17 +244,17 @@ public class ManaStorageTablet extends Item {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private float manaFraction(ItemStack stack) {
+    private double manaFraction(ItemStack stack) {
         GlobalPos pos = bound(stack);
         if(ManaStorage.coreClientDataMap.containsKey(pos)) {
-            return ManaStorage.coreClientDataMap.get(pos).powered() ? (float) ManaStorage.coreClientDataMap.get(pos).manaFraction() : 0;
+            return ManaStorage.coreClientDataMap.get(pos).powered() ? ManaStorage.coreClientDataMap.get(pos).manaFraction() : 0;
         }
         return 0;
     }
 
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
-        return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip(manaFraction(stack))) : Optional.empty();
+        return isBoundLoadedAndPowered(stack, null) ? Optional.of(new ManaBarTooltip((float) manaFraction(stack))) : Optional.empty();
     }
 
     @Override
@@ -269,6 +269,6 @@ public class ManaStorageTablet extends Item {
 
     @Override
     public int getBarColor(@NotNull ItemStack stack) {
-        return Mth.hsvToRgb(manaFraction(stack) / 3.0F, 1.0F, 1.0F);
+        return Mth.hsvToRgb((float) (manaFraction(stack) / 3.0F), 1.0F, 1.0F);
     }
 }
