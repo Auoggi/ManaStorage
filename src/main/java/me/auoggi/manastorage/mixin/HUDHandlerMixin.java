@@ -4,9 +4,9 @@ import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.ModItems;
+import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,10 +38,10 @@ public class HUDHandlerMixin {
 
         for(ItemStack stack : stacks) {
             ModManaItem modManaItem = ModManaItem.of(stack);
-            GlobalPos bound = null; //TODO get bound position of stack
-            if(modManaItem != null && stack.is(ModItems.testItem.get()) && ManaStorage.coreClientDataMap.containsKey(bound) && ManaStorage.coreClientDataMap.get(bound).powered()) {
-                totalMana += (int) ManaStorage.coreClientDataMap.get(bound).mana();
-                totalMaxMana += (int) ManaStorage.coreClientDataMap.get(bound).capacity();
+            ModBoundItem modBoundItem = ModBoundItem.of(stack);
+            if(modManaItem != null && stack.is(ModItems.testItem.get()) && modBoundItem != null && ManaStorage.coreClientDataMap.containsKey(modBoundItem.getBinding()) && ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).powered()) {
+                totalMana += (int) ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).mana();//TODO doesn't work use modify variable
+                totalMaxMana += (int) ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).capacity();//TODO doesn't work use modify variable
             }
         }
     }
