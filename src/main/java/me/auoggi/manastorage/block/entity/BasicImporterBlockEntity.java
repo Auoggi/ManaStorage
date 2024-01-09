@@ -89,7 +89,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     public void load(@NotNull CompoundTag tag) {
-        manaStorage.setMana(tag.getInt("Mana"));
+        manaStorage.setMana(tag.getLong("Mana"));
         manaStorage.onManaChanged();
         itemStorage.deserializeNBT(tag.getCompound("Inventory"));
         energyStorage.setEnergy(tag.getInt("Energy"));
@@ -142,7 +142,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         ManaStorage.pendingCoreServerDataMap.put(GlobalPos.of(level.dimension(), blockPos), ManaStorageCoreClientData.of(this));
 
         if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
-            importMana(level, blockPos, blockState, manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.basicSpeed, true), false), false);
+            importMana(level, blockPos, blockState, (int) manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.basicSpeed, true), false), false);
     }
 
     public void dropContents() {
@@ -154,7 +154,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         Containers.dropContents(level, worldPosition, inventory);
     }
 
-    public long importMana(Level level, BlockPos blockPos, BlockState blockState, long amount, boolean simulate) {
+    public int importMana(Level level, BlockPos blockPos, BlockState blockState, int amount, boolean simulate) {
         BlockEntity facing = level.getBlockEntity(blockPos.relative(blockState.getValue(BasicImporterBlock.FACING)));
         if(facing instanceof TileEntityGeneratingFlower flower) {
             amount = Math.min(flower.getMana(), amount);
