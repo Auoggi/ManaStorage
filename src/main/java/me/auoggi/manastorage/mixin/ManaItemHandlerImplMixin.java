@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import vazkii.botania.api.mana.IManaItem;
@@ -19,8 +21,7 @@ import vazkii.botania.xplat.IXplatAbstractions;
 import java.util.*;
 
 //Remap set to false and marking mixin as @Pseudo makes it possible to mix into classes that don't exist at runtime - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Pseudo.html
-//Priority of 1 will ensure it is first - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Mixin.html#priority--
-@Pseudo @Mixin(value = ManaItemHandlerImpl.class, remap = false, priority = 1)
+@Pseudo @Mixin(value = ManaItemHandlerImpl.class, remap = false)
 public abstract class ManaItemHandlerImplMixin {
     @Unique
     private final Map<ModManaItem, Integer> manastorage$toRemove = new HashMap<>();
@@ -48,6 +49,13 @@ public abstract class ManaItemHandlerImplMixin {
         }
 
         return toReturn;
+    }
+
+    //TODO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    @ModifyVariable(method = "requestManaExact", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"), to = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0)), at = @At(value = "STORE"), ordinal = 0, print = true)
+    private int manaReceived(int value) {
+        System.out.println(value);
+        return 1000000000;
     }
 
     @Inject(method = "requestMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
