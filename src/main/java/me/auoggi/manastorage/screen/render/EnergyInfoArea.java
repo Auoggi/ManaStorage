@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.util.ModEnergyStorage;
-import me.auoggi.manastorage.util.NumberUtil;
+import me.auoggi.manastorage.util.ToString;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
@@ -28,7 +28,7 @@ public class EnergyInfoArea extends GuiComponent {
     }
 
     public Component getTooltip() {
-        return new TextComponent(NumberUtil.toMagnitude(energy.getEnergyStored()) + " / " + NumberUtil.toMagnitude(energy.getFullCapacity()) + " FE");
+        return new TextComponent(ToString.magnitude(energy.getEnergyStored()) + " / " + ToString.magnitude(energy.getFullCapacity()) + " FE");
     }
 
     public void draw(PoseStack poseStack) {
