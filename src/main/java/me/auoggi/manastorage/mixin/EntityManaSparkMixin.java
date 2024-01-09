@@ -44,7 +44,7 @@ public abstract class EntityManaSparkMixin {
         if(!manaItems.isEmpty()) manastorage$receivingPlayers.add(player);
 
         //Make sure default Botania code doesn't happen
-        stacks = Collections.singletonList(ItemStack.EMPTY);
+        stacks = Collections.singletonList(ItemStack.EMPTY);//TODO doesn't work use modify variable
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Map;isEmpty()Z", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)

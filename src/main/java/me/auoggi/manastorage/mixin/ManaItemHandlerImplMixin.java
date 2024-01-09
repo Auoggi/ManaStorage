@@ -66,7 +66,7 @@ public abstract class ManaItemHandlerImplMixin {
 
                 if(remove) manaItem.extractMana(mana, false, server);
 
-                manaReceived += mana;
+                manaReceived += mana;//TODO doesn't work use modify variable
 
                 if(manaReceived >= manaToGet) break;
             }
@@ -90,7 +90,7 @@ public abstract class ManaItemHandlerImplMixin {
 
                 if(remove) manastorage$toRemove.put(manaItem, mana);
 
-                manaReceived += mana;
+                manaReceived += mana;//TODO doesn't work use modify variable
 
                 if(manaReceived >= manaToGet) break;
             }
@@ -168,7 +168,7 @@ public abstract class ManaItemHandlerImplMixin {
                 int mana = (int) manaItem.getManaStored(server);
 
                 if(mana > cost) {
-                    invocations += mana / cost;
+                    invocations += mana / cost;//TODO doesn't work use modify variable
                 }
             }
         }

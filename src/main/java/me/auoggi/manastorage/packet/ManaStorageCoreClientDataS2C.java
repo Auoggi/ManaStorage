@@ -23,7 +23,7 @@ public class ManaStorageCoreClientDataS2C {
     public ManaStorageCoreClientDataS2C(FriendlyByteBuf friendlyByteBuf) {
         this.data = friendlyByteBuf.readMap(
                 (buf) -> GlobalPos.CODEC.parse(NbtOps.INSTANCE, buf.readNbt().get("GlobalPos")).result().filter(position -> position.pos().getY() != Integer.MIN_VALUE).orElse(null),
-                (buf) -> new ManaStorageCoreClientData(buf.readBoolean(), buf.readDouble())
+                (buf) -> new ManaStorageCoreClientData(buf.readBoolean(), buf.readLong(), buf.readLong(), buf.readDouble())
         );
     }
 
@@ -34,6 +34,8 @@ public class ManaStorageCoreClientDataS2C {
             buf.writeNbt(compoundTag);
         }, (buf, data) -> {
             buf.writeBoolean(data.powered());
+            buf.writeLong(data.mana());
+            buf.writeLong(data.capacity());
             buf.writeDouble(data.manaFraction());
         });
     }

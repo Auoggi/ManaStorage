@@ -29,8 +29,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import vazkii.botania.api.BotaniaForgeCapabilities;
-import vazkii.botania.api.item.ICoordBoundItem;
 import vazkii.botania.api.mana.ManaBarTooltip;
 
 import java.util.Arrays;
@@ -83,7 +81,7 @@ public class ManaStorageTablet extends Item {
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ModCapabilityProvider(super.initCapabilities(stack, nbt), Arrays.asList(
                 new ModCapability(ModCapabilities.manaItem, () -> new ManaItem(stack)),
-                new ModCapability(BotaniaForgeCapabilities.COORD_BOUND_ITEM, () -> new CoordBoundItem(stack))
+                new ModCapability(ModCapabilities.boundItem, () -> new BoundItem(stack))
         ));
     }
 
@@ -229,10 +227,10 @@ public class ManaStorageTablet extends Item {
         }
     }
 
-    public class CoordBoundItem implements ICoordBoundItem {
+    public class BoundItem implements ModBoundItem {
         private final ItemStack stack;
 
-        public CoordBoundItem(ItemStack stack) {
+        public BoundItem(ItemStack stack) {
             this.stack = stack;
         }
 
@@ -240,6 +238,11 @@ public class ManaStorageTablet extends Item {
         public BlockPos getBinding(Level level) {
             GlobalPos pos = bound(stack);
             return pos != null && pos.dimension() == level.dimension() ? pos.pos() : null;
+        }
+
+        @Override
+        public GlobalPos getBinding() {
+            return bound(stack);
         }
     }
 
