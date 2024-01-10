@@ -18,8 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Iterator;
 
 //Remap set to false and marking mixin as @Pseudo makes it possible to mix into classes that don't exist at runtime - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Pseudo.html
-//Priority of Integer.MAX_VALUE will ensure it is always dead last - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Mixin.html#priority--
-@Pseudo @Mixin(value = Level.class, remap = false, priority = Integer.MAX_VALUE)
+@Pseudo @Mixin(value = Level.class, remap = false)
 public class LevelMixin {
     @Shadow @Final private ResourceKey<Level> dimension;
 

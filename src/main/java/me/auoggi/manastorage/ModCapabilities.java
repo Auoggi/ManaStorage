@@ -8,5 +8,4 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class ModCapabilities {
     public static final Capability<ModManaItem> manaItem = CapabilityManager.get(new CapabilityToken<>() {});
-    public static final Capability<ModBoundItem> boundItem = CapabilityManager.get(new CapabilityToken<>() {});
 }

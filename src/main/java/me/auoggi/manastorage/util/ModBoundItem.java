@@ -9,9 +9,4 @@ import javax.annotation.Nullable;
 
 public interface ModBoundItem extends ICoordBoundItem {
     GlobalPos getBinding();
-
-    @Nullable
-    static ModBoundItem of(ItemStack stack) {
-        return stack.getCapability(ModCapabilities.boundItem).orElse(null);
-    }
 }
