@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,6 +21,8 @@ import java.util.*;
 //Remap set to false and marking mixin as @Pseudo makes it possible to mix into classes that don't exist at runtime - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Pseudo.html
 @Pseudo @Mixin(value = ManaItemHandlerImpl.class, remap = false)
 public abstract class ManaItemHandlerImplMixin {
+    @Shadow protected abstract int discountManaForTool(ItemStack stack, Player player, int inCost);
+
     @Unique
     private final Map<ModManaItem, Integer> manastorage$toRemove = new HashMap<>();
 
@@ -48,15 +51,34 @@ public abstract class ManaItemHandlerImplMixin {
         return toReturn;
     }
 
-    //TODO this is how to do it
     @SuppressWarnings("InvalidInjectorMethodSignature")
-    @ModifyVariable(method = "requestManaExact", at = @At(value = "STORE", ordinal = 0), name = "manaReceived")
-    private int manaReceived(int value) {
-        System.out.println(value);
-        return 1000000000;
+    @ModifyVariable(method = "requestMana", at = @At(value = "STORE", ordinal = 0), name = "manaReceived")
+    private int requestMana(int value, ItemStack stack, Player player, int manaToGet, boolean remove) {
+        MinecraftServer server = player.getServer();
+        if(server != null) {
+            int manaReceived = 0;
+            for(ItemStack itemStack : manastorage$getModManaItems(player)) {
+                if(itemStack == stack) continue;
+                ModManaItem manaItem = ModManaItem.of(itemStack);
+                IManaItem requester = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || (requester != null && !requester.canReceiveManaFromItem(itemStack))) {
+                    continue;
+                }
+
+                int mana = (int) Math.min(manaToGet - manaReceived, manaItem.getManaStored(server));
+
+                if(remove) manaItem.extractMana(mana, false, server);
+
+                manaReceived += mana;
+
+                if(manaReceived >= manaToGet) break;
+            }
+            if(manaReceived >= manaToGet) return value + manaReceived;
+        }
+        return value;
     }
 
-    @Inject(method = "requestMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    /*@Inject(method = "requestMana", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void requestMana(ItemStack stack, Player player, int manaToGet, boolean remove, CallbackInfoReturnable<Integer> cir, List<ItemStack> items, List<ItemStack> acc, int manaReceived) {
         MinecraftServer server = player.getServer();
         if(server != null) {
@@ -78,9 +100,39 @@ public abstract class ManaItemHandlerImplMixin {
             }
             if(manaReceived >= manaToGet) cir.setReturnValue(manaReceived);
         }
+    }*/
+
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyVariable(method = "requestManaExact", at = @At(value = "STORE", ordinal = 0), name = "manaReceived")
+    private int requestManaExact0(int value, ItemStack stack, Player player, int manaToGet, boolean remove) {
+        MinecraftServer server = player.getServer();
+        if(server != null) {
+            int manaReceived = 0;
+            for(ItemStack itemStack : manastorage$getModManaItems(player)) {
+                if(itemStack == stack) continue;
+                ModManaItem manaItem = ModManaItem.of(itemStack);
+                IManaItem requester = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || (requester != null && !requester.canReceiveManaFromItem(itemStack))) {
+                    continue;
+                }
+
+                int mana = (int) Math.min(manaToGet - manaReceived, manaItem.getManaStored(server));
+
+                if(remove) manastorage$toRemove.put(manaItem, mana);
+
+                manaReceived += mana;
+
+                if(manaReceived >= manaToGet) break;
+            }
+            if(manaReceived == manaToGet) {
+                manastorage$clearToRemove(server);
+                return value + manaReceived;
+            }
+        }
+        return value;
     }
 
-    @Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0, shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    /*@Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0, shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void requestManaExact0(ItemStack stack, Player player, int manaToGet, boolean remove, CallbackInfoReturnable<Boolean> cir, List<ItemStack> items, List<ItemStack> acc, int manaReceived) {
         MinecraftServer server = player.getServer();
         if(server != null) {
@@ -105,7 +157,7 @@ public abstract class ManaItemHandlerImplMixin {
                 cir.setReturnValue(true);
             }
         }
-    }
+    }*/
 
     @Inject(method = "requestManaExact", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 1, shift = At.Shift.BY, by = -2))
     private void requestManaExact1(ItemStack stack, Player player, int manaToGet, boolean remove, CallbackInfoReturnable<Boolean> cir) {
@@ -159,7 +211,33 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    @Inject(method = "getInvocationCountForTool", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD)
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyVariable(method = "getInvocationCountForTool", at = @At(value = "STORE", ordinal = 0), name = "invocations")
+    private int getInvocationCountForTool(int value, ItemStack stack, Player player, int manaToGet) {
+        MinecraftServer server = player.getServer();
+        if(server != null) {
+            int cost = discountManaForTool(stack, player, manaToGet);
+            int invocations = 0;
+            for(ItemStack itemStack : manastorage$getModManaItems(player)) {
+                if(itemStack == stack) continue;
+                ModManaItem manaItem = ModManaItem.of(itemStack);
+                IManaItem requester = IXplatAbstractions.INSTANCE.findManaItem(stack);
+                if(manaItem == null || !manaItem.canExportManaToItem(stack, player.getServer()) || (requester != null && !requester.canReceiveManaFromItem(itemStack)) || cost == 0) {
+                    continue;
+                }
+
+                int mana = (int) manaItem.getManaStored(server);
+
+                if(mana > cost) {
+                    invocations += mana / cost;
+                }
+            }
+            return value + invocations;
+        }
+        return value;
+    }
+
+    /*@Inject(method = "getInvocationCountForTool", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD)
     private void getInvocationCountForTool(ItemStack stack, Player player, int manaToGet, CallbackInfoReturnable<Integer> cir, int cost, int invocations) {
         MinecraftServer server = player.getServer();
         if(server != null) {
@@ -178,5 +256,5 @@ public abstract class ManaItemHandlerImplMixin {
                 }
             }
         }
-    }
+    }*/
 }
