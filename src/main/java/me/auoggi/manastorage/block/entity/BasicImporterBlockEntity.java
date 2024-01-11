@@ -151,6 +151,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
             inventory.setItem(i, itemStorage.getStackInSlot(i));
         }
 
+        assert level != null;
         Containers.dropContents(level, worldPosition, inventory);
     }
 
@@ -159,13 +160,13 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         if(facing instanceof TileEntityGeneratingFlower flower) {
             amount = Math.min(flower.getMana(), amount);
             if(!simulate) {
-                flower.addMana((int) -amount);
+                flower.addMana(-amount);
                 flower.sync();
             }
             return amount;
         } else if(facing instanceof TilePool pool) {
             amount = Math.min(pool.getCurrentMana(), amount);
-            if(!simulate) pool.receiveMana((int) -amount);
+            if(!simulate) pool.receiveMana(-amount);
             return amount;
         }
 

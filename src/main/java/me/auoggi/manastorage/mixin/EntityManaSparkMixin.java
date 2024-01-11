@@ -27,8 +27,6 @@ public abstract class EntityManaSparkMixin {
 
     @Shadow protected abstract void particlesTowards(Entity e);
 
-    @Shadow public abstract void setUpgrade(SparkUpgradeType upgrade);
-
     @Unique
     private final List<Player> manastorage$receivingPlayers = new ArrayList<>();
 

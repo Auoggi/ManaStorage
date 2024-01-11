@@ -40,7 +40,7 @@ public class BasicImporterScreen extends AbstractContainerScreen<BasicImporterMe
     }
 
     @Override
-    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
         renderInfoAreaTooltips(poseStack, mouseX, mouseY);
     }
 

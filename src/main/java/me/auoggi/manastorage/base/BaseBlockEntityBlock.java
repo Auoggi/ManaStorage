@@ -41,7 +41,7 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public abstract BlockState getStateForPlacement(BlockPlaceContext context);
+    public abstract BlockState getStateForPlacement(@NotNull BlockPlaceContext context);
 
     @Override
     public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation direction) {
@@ -49,7 +49,7 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState newBlockState, boolean isMoving) {
+    public void onRemove(BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, BlockState newBlockState, boolean isMoving) {
         if(blockState.getBlock() != newBlockState.getBlock()) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if(blockEntity instanceof HasItemStorage entity) {
@@ -60,7 +60,7 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult hitResult) {
         if(!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if(blockEntity instanceof BaseBlockEntity entity) {
@@ -88,9 +88,9 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public abstract BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState);
+    public abstract BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState);
 
     @Nullable
     @Override
-    public abstract <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType);
+    public abstract <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType);
 }
