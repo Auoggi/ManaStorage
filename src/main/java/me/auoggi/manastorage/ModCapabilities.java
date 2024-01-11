@@ -1,6 +1,5 @@
 package me.auoggi.manastorage;
 
-import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;

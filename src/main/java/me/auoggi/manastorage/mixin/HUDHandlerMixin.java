@@ -1,24 +1,17 @@
 package me.auoggi.manastorage.mixin;
 
 import com.google.common.collect.Iterables;
-import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
-import me.auoggi.manastorage.ModItems;
 import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import vazkii.botania.client.gui.HUDHandler;
 import vazkii.botania.xplat.IXplatAbstractions;
 

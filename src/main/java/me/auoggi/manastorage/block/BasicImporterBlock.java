@@ -54,7 +54,7 @@ public class BasicImporterBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState newBlockState, boolean isMoving) {
+    public void onRemove(BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, BlockState newBlockState, boolean isMoving) {
         if(blockState.getBlock() != newBlockState.getBlock()) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if(blockEntity instanceof BasicImporterBlockEntity entity) {
@@ -65,7 +65,7 @@ public class BasicImporterBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult hitResult) {
         if(!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if(blockEntity instanceof BasicImporterBlockEntity entity) {
@@ -93,7 +93,7 @@ public class BasicImporterBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
         return createTickerHelper(blockEntityType, ModBlockEntities.basicImporter.get(), !level.isClientSide ? BasicImporterBlockEntity::tick : null);
     }
 }
