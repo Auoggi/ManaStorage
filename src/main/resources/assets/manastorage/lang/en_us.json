@@ -28,5 +28,7 @@
     "block.manastorage.1024m_mana_storage_block": "1024M Mana Storage Block",
 
     "lexicon.category.manastorage.manastorage.name": "ManaStorage",
-    "lexicon.category.manastorage.manastorage.description": "Adds a storage system to store Mana"
+    "lexicon.category.manastorage.manastorage.description": "Adds a storage system to store Mana",
+
+    "lexicon.entry.manastorage_tablet.description": "The ManaStorage Tablet works just like the Mana Tablet except it stores mana in a ManaStorage system."
 }

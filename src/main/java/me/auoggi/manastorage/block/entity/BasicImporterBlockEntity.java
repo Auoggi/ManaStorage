@@ -54,7 +54,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return slot == 0 && stack.getItem() == ModItems.testItem.get();
+            return slot == 0 && stack.getItem() == ModItems.linker.get();
         }
     };
 
@@ -151,7 +151,6 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
             inventory.setItem(i, itemStorage.getStackInSlot(i));
         }
 
-        assert level != null;
         Containers.dropContents(level, worldPosition, inventory);
     }
 
