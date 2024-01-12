@@ -60,25 +60,4 @@ public class HUDHandlerMixin {
     private static int totalMaxMana(int value) {
         return value + manastorage$getValues().get(1);
     }
-
-    /*@Inject(method = "onDrawScreenPost", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getInventory()Lnet/minecraft/world/entity/player/Inventory;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void onDrawScreenPost(PoseStack ms, float partialTicks, CallbackInfo ci, Minecraft mc, ProfilerFiller profiler, ItemStack main, ItemStack offhand, HitResult pos, Player player, int totalMana, int totalMaxMana) {
-        List<ItemStack> stacks = new ArrayList<>();
-
-        for(ItemStack stack : Iterables.concat(player.getInventory().items, player.getInventory().offhand)) {
-            if(!stack.isEmpty() && ModManaItem.of(stack) != null) {
-                stacks.add(stack);
-            }
-        }
-
-        for(ItemStack stack : stacks) {
-            ModManaItem modManaItem = ModManaItem.of(stack);
-            if(IXplatAbstractions.INSTANCE.findCoordBoundItem(stack) instanceof ModBoundItem modBoundItem) {
-                if(modManaItem != null && stack.is(ModItems.testItem.get()) && ManaStorage.coreClientDataMap.containsKey(modBoundItem.getBinding()) && ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).powered()) {
-                    totalMana += (int) ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).mana();//TODO doesn't work use modify variable
-                    totalMaxMana += (int) ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).capacity();//TODO doesn't work use modify variable
-                }
-            }
-        }
-    }*/
 }

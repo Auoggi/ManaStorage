@@ -25,7 +25,6 @@ import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
-//TODO give gui texture outline of Network Linker
 @Mod("manastorage")
 public class ManaStorage {
     public static final String MODID = "manastorage";
@@ -65,7 +64,7 @@ public class ManaStorage {
 
         //Make tooltip image render if ItemStack has ModManaItem capability
         MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, (RenderTooltipEvent.Color e) -> {
-            if (ModManaItem.of(e.getItemStack()) != null) {
+            if(ModManaItem.of(e.getItemStack()) != null) {
                 int width = 0;
                 ManaBarTooltipComponent manaBar = null;
                 for(ClientTooltipComponent component : e.getComponents()) {
