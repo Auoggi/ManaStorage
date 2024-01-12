@@ -8,7 +8,7 @@ public class ModCreativeModeTab {
     public static final CreativeModeTab CREATIVE_MODE_TAB = new CreativeModeTab("manastorage_creative_mode_tab") {
         @Override
         public @NotNull ItemStack makeIcon() {
-            return new ItemStack(ModItems.testItem.get());
+            return new ItemStack(ModItems.tablet.get());
         }
     };
 }
