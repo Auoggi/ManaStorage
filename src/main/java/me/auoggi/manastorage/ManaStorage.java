@@ -96,11 +96,10 @@ public class ManaStorage {
                 pendingCoreServerDataMap.clear();
             }
 
-            //Clone coreServerDataMap and make entrySet from clone as to not iterate over a set we are modifying
+            //Clone entrySet from coreServerDataMap as to not iterate over a set we are modifying
             Set<Map.Entry<GlobalPos, ManaStorageCoreClientData>> entrySet = new HashSet<>();
             if(!coreServerDataMap.isEmpty()) {
-                Map<GlobalPos, ManaStorageCoreClientData> map = new HashMap<>(coreServerDataMap);
-                entrySet.addAll(map.entrySet());
+                entrySet.addAll(coreServerDataMap.entrySet());
             }
 
             for(Map.Entry<GlobalPos, ManaStorageCoreClientData> entry : entrySet) {
