@@ -2,6 +2,7 @@ package me.auoggi.manastorage.mixin;
 
 import com.google.common.collect.Iterables;
 import me.auoggi.manastorage.ManaStorage;
+import me.auoggi.manastorage.util.ManaStorageCoreClientData;
 import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraft.client.Minecraft;
@@ -13,7 +14,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import vazkii.botania.client.gui.HUDHandler;
-import vazkii.botania.xplat.IXplatAbstractions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +36,12 @@ public class HUDHandlerMixin {
         int totalMaxMana = 0;
         for(ItemStack stack : stacks) {
             ModManaItem modManaItem = ModManaItem.of(stack);
-            if(IXplatAbstractions.INSTANCE.findCoordBoundItem(stack) instanceof ModBoundItem modBoundItem) {
-                if(modManaItem != null && ManaStorage.coreClientDataMap.containsKey(modBoundItem.getBinding()) && ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).powered()) {
-                    totalMana += (int) ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).mana();
-                    totalMaxMana += (int) ManaStorage.coreClientDataMap.get(modBoundItem.getBinding()).capacity();
+            ModBoundItem modBoundItem = ModBoundItem.of(stack);
+            if(modManaItem != null && modBoundItem != null && ManaStorage.coreClientDataMap.containsKey(modBoundItem.getBinding())) {
+                ManaStorageCoreClientData data = ManaStorage.coreClientDataMap.get(modBoundItem.getBinding());
+                if(data.powered()) {
+                    totalMana += (int) data.mana();
+                    totalMaxMana += (int) data.capacity();
                 }
             }
         }
