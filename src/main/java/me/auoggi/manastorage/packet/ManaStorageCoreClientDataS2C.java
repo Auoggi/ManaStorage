@@ -6,8 +6,6 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Map;
@@ -41,12 +39,7 @@ public class ManaStorageCoreClientDataS2C {
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
-        supplier.get().enqueueWork(this::clientHandle);
+        supplier.get().enqueueWork(() -> ManaStorage.coreClientDataMap = data);
         return true;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void clientHandle() {
-        ManaStorage.coreClientDataMap = data;
     }
 }

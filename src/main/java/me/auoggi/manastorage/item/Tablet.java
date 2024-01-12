@@ -15,8 +15,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -121,7 +119,6 @@ public class Tablet extends BaseBoundItem {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     private double manaFraction(ItemStack stack) {
         GlobalPos pos = bound(stack);
         if(ManaStorage.coreClientDataMap.containsKey(pos)) {
