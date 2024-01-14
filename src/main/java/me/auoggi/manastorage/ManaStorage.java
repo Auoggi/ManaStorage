@@ -81,7 +81,7 @@ public class ManaStorage {
     }
 
     @SubscribeEvent
-    public void tick(@NotNull TickEvent.WorldTickEvent event) {
+    public void tick(final TickEvent.WorldTickEvent event) {
         //Make sure we only execute once and at the end of every tick and only when we are on the server
         if(event.phase.equals(TickEvent.Phase.END) && event.world instanceof ServerLevel serverLevel && serverLevel.dimension().toString().equals("ResourceKey[minecraft:dimension / minecraft:overworld]")) {
             List<GlobalPos> loadedBlockEntities = new ArrayList<>();
