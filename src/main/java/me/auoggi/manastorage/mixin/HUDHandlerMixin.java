@@ -38,12 +38,14 @@ public class HUDHandlerMixin {
         for(ItemStack stack : stacks) {
             ModManaItem modManaItem = ModManaItem.of(stack);
             ModBoundItem modBoundItem = ModBoundItem.of(stack);
-            if(modManaItem != null && modBoundItem != null && ManaStorage.clientCoreData.containsKey(modBoundItem.getBinding())) {
+            if(modManaItem != null && modBoundItem != null) {
                 GlobalPos binding = modBoundItem.getBinding();
-                CoreData data = ManaStorage.clientCoreData.get(binding.dimension()).get(binding.pos());
-                if(data.powered()) {
-                    totalMana += (int) data.mana();
-                    totalMaxMana += (int) data.capacity();
+                if(ManaStorage.clientCoreData.containsKey(binding.dimension()) && ManaStorage.clientCoreData.get(binding.dimension()).containsKey(binding.pos())) {
+                    CoreData data = ManaStorage.clientCoreData.get(binding.dimension()).get(binding.pos());
+                    if(data.powered()) {
+                        totalMana += (int) data.mana();
+                        totalMaxMana += (int) data.capacity();
+                    }
                 }
             }
         }

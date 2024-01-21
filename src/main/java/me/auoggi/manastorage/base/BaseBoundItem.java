@@ -113,7 +113,7 @@ public abstract class BaseBoundItem extends Item {
     protected boolean isBoundLoaded(ItemStack stack, MinecraftServer server) {
         if(isBound(stack)) {
             GlobalPos pos = bound(stack);
-            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos);
+            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos.dimension()) && ManaStorage.clientCoreData.get(pos.dimension()).containsKey(pos.pos());
         }
         return false;
     }
