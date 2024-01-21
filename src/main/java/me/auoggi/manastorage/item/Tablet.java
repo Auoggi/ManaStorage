@@ -4,9 +4,11 @@ import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.ModCapabilities;
 import me.auoggi.manastorage.base.BaseBoundItem;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
+import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.ModCapability;
 import me.auoggi.manastorage.util.ModCapabilityProvider;
 import me.auoggi.manastorage.util.ModManaItem;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -22,6 +24,7 @@ import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaBarTooltip;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 //TODO Replace BasicImporter with Core when added
@@ -121,8 +124,11 @@ public class Tablet extends BaseBoundItem {
 
     private double manaFraction(ItemStack stack) {
         GlobalPos pos = bound(stack);
-        if(ManaStorage.coreClientDataMap.containsKey(pos)) {
-            return ManaStorage.coreClientDataMap.get(pos).powered() ? ManaStorage.coreClientDataMap.get(pos).manaFraction() : 0;
+        if(ManaStorage.clientCoreData.containsKey(pos.dimension())) {
+            Map<BlockPos, CoreData> map = ManaStorage.clientCoreData.get(pos.dimension());
+            if(map.containsKey(pos.pos())) {
+                return map.get(pos.pos()).powered() ? map.get(pos.pos()).manaFraction() : 0;
+            }
         }
         return 0;
     }

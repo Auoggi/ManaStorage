@@ -8,7 +8,7 @@ import me.auoggi.manastorage.block.BasicImporterBlock;
 import me.auoggi.manastorage.packet.EnergySyncS2C;
 import me.auoggi.manastorage.packet.ManaSyncS2C;
 import me.auoggi.manastorage.screen.BasicImporterMenu;
-import me.auoggi.manastorage.util.ManaStorageCoreClientData;
+import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.ModEnergyStorage;
 import me.auoggi.manastorage.util.ModItemStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
@@ -36,6 +36,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.subtile.TileEntityGeneratingFlower;
 import vazkii.botania.common.block.tile.mana.TilePool;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BasicImporterBlockEntity extends BlockEntity implements MenuProvider {
     private final ModManaStorage manaStorage = new ModManaStorage(500000) {
@@ -72,6 +75,10 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
 
     public ModEnergyStorage getEnergyStorage() {
         return energyStorage;
+    }
+
+    public int energyUsage() {
+        return ManaStorage.basicEnergyUsage;
     }
 
     public BasicImporterBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -139,9 +146,11 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), blockPos));
         ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), blockPos));
 
-        ManaStorage.pendingCoreServerDataMap.put(GlobalPos.of(level.dimension(), blockPos), ManaStorageCoreClientData.of(this));
+        Map<BlockPos, CoreData> map = !ManaStorage.pendingCoreData.isEmpty() ? ManaStorage.pendingCoreData.get(level.dimension()) : new HashMap<>();
+        map.put(blockPos, CoreData.of(this));
+        ManaStorage.pendingCoreData.put(level.dimension(), map);
 
-        if(energyStorage.extractEnergy(ManaStorage.basicEnergyUsage, false) >= ManaStorage.basicEnergyUsage && manaStorage.getRemainingCapacity() != 0)
+        if(energyStorage.extractEnergy(energyUsage(), false) >= energyUsage() && manaStorage.getRemainingCapacity() != 0)
             importMana(level, blockPos, blockState, (int) manaStorage.receiveMana(importMana(level, blockPos, blockState, ManaStorage.basicSpeed, true), false), false);
     }
 
@@ -154,18 +163,18 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         Containers.dropContents(level, worldPosition, inventory);
     }
 
-    public int importMana(Level level, BlockPos blockPos, BlockState blockState, int amount, boolean simulate) {
+    public long importMana(Level level, BlockPos blockPos, BlockState blockState, long amount, boolean simulate) {
         BlockEntity facing = level.getBlockEntity(blockPos.relative(blockState.getValue(BasicImporterBlock.FACING)));
         if(facing instanceof TileEntityGeneratingFlower flower) {
             amount = Math.min(flower.getMana(), amount);
             if(!simulate) {
-                flower.addMana(-amount);
+                flower.addMana((int) -amount);
                 flower.sync();
             }
             return amount;
         } else if(facing instanceof TilePool pool) {
             amount = Math.min(pool.getCurrentMana(), amount);
-            if(!simulate) pool.receiveMana(-amount);
+            if(!simulate) pool.receiveMana((int) -amount);
             return amount;
         }
 

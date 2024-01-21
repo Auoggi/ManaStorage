@@ -2,6 +2,7 @@ package me.auoggi.manastorage.base;
 
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
+import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ToString;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 //TODO Replace BasicImporter with Core when added
 public abstract class BaseBoundItem extends Item {
@@ -111,7 +113,7 @@ public abstract class BaseBoundItem extends Item {
     protected boolean isBoundLoaded(ItemStack stack, MinecraftServer server) {
         if(isBound(stack)) {
             GlobalPos pos = bound(stack);
-            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.coreClientDataMap.containsKey(pos);
+            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos);
         }
         return false;
     }
@@ -120,11 +122,14 @@ public abstract class BaseBoundItem extends Item {
         if(isBound(stack)) {
             if(server != null) {
                 BasicImporterBlockEntity bound = getBound(stack, server);
-                return bound != null && bound.getEnergyStorage().getEnergyStored() >= ManaStorage.basicEnergyUsage;
+                return bound != null && bound.getEnergyStorage().getEnergyStored() >= bound.energyUsage();
             } else {
                 GlobalPos pos = bound(stack);
-                if(ManaStorage.coreClientDataMap.containsKey(pos)) {
-                    return ManaStorage.coreClientDataMap.get(pos).powered();
+                if(ManaStorage.clientCoreData.containsKey(pos.dimension())) {
+                    Map<BlockPos, CoreData> map = ManaStorage.clientCoreData.get(pos.dimension());
+                    if(map.containsKey(pos.pos())) {
+                        return map.get(pos.pos()).powered();
+                    }
                 }
             }
         }
