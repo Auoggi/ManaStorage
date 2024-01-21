@@ -4,12 +4,15 @@ import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import me.auoggi.manastorage.packet.ManaStorageCoreClientDataS2C;
 import me.auoggi.manastorage.screen.BasicImporterScreen;
 import me.auoggi.manastorage.util.LevelUtil;
-import me.auoggi.manastorage.util.ManaStorageCoreClientData;
+import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -20,7 +23,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.jetbrains.annotations.NotNull;
 import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
@@ -29,13 +31,14 @@ import java.util.*;
 public class ManaStorage {
     public static final String MODID = "manastorage";
 
-    public static Map<GlobalPos, ManaStorageCoreClientData> coreClientDataMap = new HashMap<>();
+    //TODO Use correctly by looping over every dimension
+    public static Map<ResourceKey<Level>, Map<BlockPos, CoreData>> clientCoreData = new HashMap<>();
 
-    public static final List<GlobalPos> pendingLoadedBlockEntities = new ArrayList<>();
+    public static final Map<ResourceKey<Level>, List<BlockPos>> pendingLoadedBlockEntities = new HashMap<>();
 
-    public static final Map<GlobalPos, ManaStorageCoreClientData> pendingCoreServerDataMap = new HashMap<>();
+    public static final Map<ResourceKey<Level>, Map<BlockPos, CoreData>> pendingCoreData = new HashMap<>();
 
-    public static final int basicSpeed = 320;
+    public static final long basicSpeed = 320;
     public static final int basicEnergyUsage = 16000;
     public static final int advancedEnergyUsage = 160000;
     public static final int basicEnergyCapacity = basicEnergyUsage * 100;
@@ -82,35 +85,32 @@ public class ManaStorage {
 
     @SubscribeEvent
     public void tick(final TickEvent.WorldTickEvent event) {
-        //Make sure we only execute once and at the end of every tick and only when we are on the server
-        if(event.phase.equals(TickEvent.Phase.END) && event.world instanceof ServerLevel serverLevel && serverLevel.dimension().toString().equals("ResourceKey[minecraft:dimension / minecraft:overworld]")) {
-            List<GlobalPos> loadedBlockEntities = new ArrayList<>();
+        //Make sure we only execute at the end of every tick and only when we are on the server
+        if(event.phase.equals(TickEvent.Phase.END) && event.world instanceof ServerLevel serverLevel) {
+            ResourceKey<Level> dimension = serverLevel.dimension();
+
+            List<BlockPos> loadedBlockEntities = new ArrayList<>();
             if(!pendingLoadedBlockEntities.isEmpty()) {
-                loadedBlockEntities.addAll(pendingLoadedBlockEntities);
-                pendingLoadedBlockEntities.clear();
+                loadedBlockEntities.addAll(pendingLoadedBlockEntities.get(dimension));
+                pendingLoadedBlockEntities.remove(dimension);
             }
 
-            Map<GlobalPos, ManaStorageCoreClientData> coreServerDataMap = new HashMap<>();
-            if(!pendingCoreServerDataMap.isEmpty()) {
-                coreServerDataMap.putAll(pendingCoreServerDataMap);
-                pendingCoreServerDataMap.clear();
+            Map<BlockPos, CoreData> serverCoreData = new HashMap<>();
+            if(!pendingCoreData.isEmpty()) {
+                serverCoreData.putAll(pendingCoreData.get(dimension));
+                pendingCoreData.remove(dimension);
             }
 
-            //Clone entrySet from coreServerDataMap as to not iterate over a set we are modifying
-            Set<Map.Entry<GlobalPos, ManaStorageCoreClientData>> entrySet = new HashSet<>();
-            if(!coreServerDataMap.isEmpty()) {
-                entrySet.addAll(coreServerDataMap.entrySet());
-            }
+            //Clone entrySet from serverCoreData as to not iterate over a set we are modifying
+            Set<Map.Entry<BlockPos, CoreData>> entrySet = new HashSet<>();
+            if(!serverCoreData.isEmpty()) entrySet.addAll(serverCoreData.entrySet());
 
-            for(Map.Entry<GlobalPos, ManaStorageCoreClientData> entry : entrySet) {
-                ServerLevel level = serverLevel.getServer().getLevel(entry.getKey().dimension());
-                if(level == null) continue;
-
-                if(!(LevelUtil.getBlockEntity(level, entry.getKey().pos()) instanceof BasicImporterBlockEntity) || !loadedBlockEntities.contains(entry.getKey())) {
-                    coreServerDataMap.remove(entry.getKey());
+            for(Map.Entry<BlockPos, CoreData> entry : entrySet) {
+                if(!(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof BasicImporterBlockEntity) || !loadedBlockEntities.contains(entry.getKey())) {
+                    serverCoreData.remove(entry.getKey());
                 }
             }
-            ModPackets.sendToClients(new ManaStorageCoreClientDataS2C(coreServerDataMap));
+            ModPackets.sendToClients(new ManaStorageCoreClientDataS2C(dimension, serverCoreData));
         }
     }
 }

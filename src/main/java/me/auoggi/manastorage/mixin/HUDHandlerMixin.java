@@ -2,10 +2,11 @@ package me.auoggi.manastorage.mixin;
 
 import com.google.common.collect.Iterables;
 import me.auoggi.manastorage.ManaStorage;
-import me.auoggi.manastorage.util.ManaStorageCoreClientData;
+import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,8 +38,9 @@ public class HUDHandlerMixin {
         for(ItemStack stack : stacks) {
             ModManaItem modManaItem = ModManaItem.of(stack);
             ModBoundItem modBoundItem = ModBoundItem.of(stack);
-            if(modManaItem != null && modBoundItem != null && ManaStorage.coreClientDataMap.containsKey(modBoundItem.getBinding())) {
-                ManaStorageCoreClientData data = ManaStorage.coreClientDataMap.get(modBoundItem.getBinding());
+            if(modManaItem != null && modBoundItem != null && ManaStorage.clientCoreData.containsKey(modBoundItem.getBinding())) {
+                GlobalPos binding = modBoundItem.getBinding();
+                CoreData data = ManaStorage.clientCoreData.get(binding.dimension()).get(binding.pos());
                 if(data.powered()) {
                     totalMana += (int) data.mana();
                     totalMaxMana += (int) data.capacity();

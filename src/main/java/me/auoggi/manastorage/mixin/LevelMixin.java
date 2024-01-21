@@ -1,6 +1,7 @@
 package me.auoggi.manastorage.mixin;
 
 import me.auoggi.manastorage.ManaStorage;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -15,7 +16,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 //Remap set to false and marking mixin as @Pseudo makes it possible to mix into classes that don't exist at runtime - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Pseudo.html
 @Pseudo @Mixin(value = Level.class, remap = false)
@@ -26,7 +29,9 @@ public class LevelMixin {
     private void tickBlockEntity(CallbackInfo ci, ProfilerFiller profilerfiller, Iterator<TickingBlockEntity> iterator, TickingBlockEntity tickingblockentity) {
         GlobalPos pos = GlobalPos.of(dimension, tickingblockentity.getPos());
 
-        //Make sure there aren't any duplicate positions in ManaStorage.pendingLoadedBlockEntities, it's not really needed but there just in case
-        if(!ManaStorage.pendingLoadedBlockEntities.contains(pos)) ManaStorage.pendingLoadedBlockEntities.add(pos);
+        List<BlockPos> blockPosList = ManaStorage.pendingLoadedBlockEntities.containsKey(dimension) ? ManaStorage.pendingLoadedBlockEntities.get(dimension) : new ArrayList<>();
+        blockPosList.add(tickingblockentity.getPos());
+
+        ManaStorage.pendingLoadedBlockEntities.put(dimension, blockPosList);
     }
 }
