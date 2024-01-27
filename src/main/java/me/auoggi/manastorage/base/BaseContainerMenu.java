@@ -1,12 +1,10 @@
 package me.auoggi.manastorage.base;
 
-import me.auoggi.manastorage.ModBlocks;
-import me.auoggi.manastorage.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,14 +18,14 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
 
     private final int slotCount;
 
-    public BaseContainerMenu(int id, Inventory inventory, int slotCount, FriendlyByteBuf friendlyByteBuf) {
-        //noinspection unchecked
-        this(id, inventory, slotCount, (E) inventory.player.level.getBlockEntity(friendlyByteBuf.readBlockPos()));
+    @SuppressWarnings("unchecked")
+    public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, FriendlyByteBuf friendlyByteBuf) {
+        this(id, inventory, slotCount, menuType, (E) inventory.player.level.getBlockEntity(friendlyByteBuf.readBlockPos()));
     }
 
-    public BaseContainerMenu(int id, Inventory inventory, int slotCount, E blockEntity) {
-        super(ModMenuTypes.basicImporter.get(), id);
-        this.blockEntity = (E) blockEntity;
+    public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, E blockEntity) {
+        super(menuType, id);
+        this.blockEntity = blockEntity;
         level = inventory.player.level;
         this.slotCount = slotCount;
         addPlayerInventory(inventory);
@@ -72,9 +70,11 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.basicImporter.get());
+        //Check if player is too far from the block
+        return player.distanceToSqr(blockEntity.getBlockPos().getX() + 0.5, blockEntity.getBlockPos().getY() + 0.5, blockEntity.getBlockPos().getZ() + 0.5) <= 64.0;
     }
 
+    //TODO doesn't return the correct BlockEntity
     public E getBlockEntity() {
         return blockEntity;
     }

@@ -3,6 +3,8 @@ package me.auoggi.manastorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import me.auoggi.manastorage.packet.ManaStorageCoreClientDataS2C;
 import me.auoggi.manastorage.screen.BasicImporterScreen;
+import me.auoggi.manastorage.screen.ManaStorageBlockMenu;
+import me.auoggi.manastorage.screen.ManaStorageBlockScreen;
 import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.ModManaItem;
@@ -27,11 +29,12 @@ import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
+//TODO Block Upgrades
+//TODO Core, Importers, Exporters
 @Mod("manastorage")
 public class ManaStorage {
     public static final String MODID = "manastorage";
 
-    //TODO Use correctly by looping over every dimension
     public static Map<ResourceKey<Level>, Map<BlockPos, CoreData>> clientCoreData = new HashMap<>();
 
     public static final Map<ResourceKey<Level>, List<BlockPos>> pendingLoadedBlockEntities = new HashMap<>();
@@ -65,6 +68,8 @@ public class ManaStorage {
     public void clientSetup(final FMLClientSetupEvent event) {
         MenuScreens.register(ModMenuTypes.basicImporter.get(), BasicImporterScreen::new);
 
+        MenuScreens.register(ModMenuTypes.manaStorageBlock.get(), ManaStorageBlockScreen::new);
+
         //Make tooltip image render if ItemStack has ModManaItem capability
         MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, (RenderTooltipEvent.Color e) -> {
             if(ModManaItem.of(e.getItemStack()) != null) {
@@ -90,13 +95,13 @@ public class ManaStorage {
             ResourceKey<Level> dimension = serverLevel.dimension();
 
             List<BlockPos> loadedBlockEntities = new ArrayList<>();
-            if(!pendingLoadedBlockEntities.isEmpty()) {
+            if(pendingLoadedBlockEntities.containsKey(dimension)) {
                 loadedBlockEntities.addAll(pendingLoadedBlockEntities.get(dimension));
                 pendingLoadedBlockEntities.remove(dimension);
             }
 
             Map<BlockPos, CoreData> serverCoreData = new HashMap<>();
-            if(!pendingCoreData.isEmpty()) {
+            if(pendingCoreData.containsKey(dimension)) {
                 serverCoreData.putAll(pendingCoreData.get(dimension));
                 pendingCoreData.remove(dimension);
             }

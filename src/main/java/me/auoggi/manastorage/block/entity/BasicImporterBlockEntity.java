@@ -143,8 +143,8 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void tick(Level level, BlockPos blockPos, BlockState blockState) {
-        ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), blockPos));
-        ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), blockPos));
+        /*ModPackets.sendToClients(new ManaSyncS2C(manaStorage.getManaStored(), blockPos));
+        ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), blockPos));*/
 
         Map<BlockPos, CoreData> map = !ManaStorage.pendingCoreData.isEmpty() ? ManaStorage.pendingCoreData.get(level.dimension()) : new HashMap<>();
         map.put(blockPos, CoreData.of(this));
