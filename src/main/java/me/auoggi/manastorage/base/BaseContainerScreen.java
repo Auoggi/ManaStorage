@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.screen.render.EnergyInfoArea;
 import me.auoggi.manastorage.screen.render.ManaInfoArea;
+import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.MouseUtil;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -18,8 +19,8 @@ import java.util.Optional;
 
 public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends AbstractContainerScreen<M> {
     private final ResourceLocation texture;
-    private EnergyInfoArea energyInfoArea;
-    private ManaInfoArea manaInfoArea;
+    private EnergyInfoArea energyInfoArea = null;
+    private ManaInfoArea manaInfoArea = null;
 
     public BaseContainerScreen(M menu, Inventory inventory, Component component, String texture) {
         super(menu, inventory, component);
@@ -45,11 +46,13 @@ public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends Abstrac
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        if(MouseUtil.isMouseAbove(mouseX, mouseY, x + 149, y + 12, 15, 64)) {
+        if(MouseUtil.isMouseAbove(mouseX, mouseY, x + 149, y + 12, 15, 64) && energyInfoArea != null) {
             renderTooltip(poseStack, List.of(energyInfoArea.getTooltip()), Optional.empty(), mouseX - x, mouseY - y);
-        } else if(MouseUtil.isMouseAbove(mouseX, mouseY, x + 12, y + 12, 15, 64)) {
+        } else if(MouseUtil.isMouseAbove(mouseX, mouseY, x + (energyInfoArea != null ? 12 : 149), y + 12, 15, 64) && manaInfoArea != null) {
             renderTooltip(poseStack, List.of(manaInfoArea.getTooltip()), Optional.empty(), mouseX - x, mouseY - y);
         }
+
+        if(energyInfoArea == null) this.font.draw(poseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
     }
 
     @Override
@@ -62,8 +65,8 @@ public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends Abstrac
         RenderSystem.setShaderTexture(0, texture);
 
         blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
-        if(menu.getBlockEntity() instanceof HasEnergyStorage) energyInfoArea.draw(poseStack);
-        if(menu.getBlockEntity() instanceof HasManaStorage) manaInfoArea.draw(poseStack);
+        if(energyInfoArea != null) energyInfoArea.draw(poseStack);
+        if(manaInfoArea != null) manaInfoArea.draw(poseStack);
     }
 
     @Override

@@ -1,15 +1,22 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.block.BasicImporterBlock;
+import me.auoggi.manastorage.block.entity.storageBlock.*;
+import me.auoggi.manastorage.block.ManaStorageBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -21,6 +28,54 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> basicImporter = registerBlock("basic_mana_importer",
             () -> new BasicImporterBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)));
+
+    public static final RegistryObject<Block> manaStorageBlock1m = registerBlock("1m_mana_storage_block",
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity1m(blockPos, blockState);
+                }
+            });
+
+    public static final RegistryObject<Block> manaStorageBlock4m = registerBlock("4m_mana_storage_block",
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity4m(blockPos, blockState);
+                }
+            });
+
+    public static final RegistryObject<Block> manaStorageBlock16m = registerBlock("16m_mana_storage_block",
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity16m(blockPos, blockState);
+                }
+            });
+
+    public static final RegistryObject<Block> manaStorageBlock64m = registerBlock("64m_mana_storage_block",
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity64m(blockPos, blockState);
+                }
+            });
+
+    public static final RegistryObject<Block> manaStorageBlock256m = registerBlock("256m_mana_storage_block",
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity256m(blockPos, blockState);
+                }
+            });
+
+    public static final RegistryObject<Block> manaStorageBlock1024m = registerBlock("1024m_mana_storage_block",
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity1024m(blockPos, blockState);
+                }
+            });
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = blocks.register(name, block);
