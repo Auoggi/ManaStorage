@@ -14,9 +14,4 @@ public class ManaStorageBlockEntity64m extends ManaStorageBlockEntity {
     public ManaStorageBlockEntity64m(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.manaStorageBlock1m.get(), blockPos, blockState, "block.manastorage.64m_mana_storage_block", 64000000);
     }
-
-    @Override
-    public @Nullable AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
-        return new ManaStorageBlockMenu<ManaStorageBlockEntity64m>(id, inventory, this);
-    }
 }

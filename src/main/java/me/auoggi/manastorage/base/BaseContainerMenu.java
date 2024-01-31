@@ -8,9 +8,12 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContainerMenu {
     private final E blockEntity;
@@ -18,14 +21,14 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
 
     private final int slotCount;
 
-    @SuppressWarnings("unchecked")
     public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, FriendlyByteBuf friendlyByteBuf) {
-        this(id, inventory, slotCount, menuType, (E) inventory.player.level.getBlockEntity(friendlyByteBuf.readBlockPos()));
+        this(id, inventory, slotCount, menuType, inventory.player.level.getBlockEntity(friendlyByteBuf.readBlockPos()));
     }
 
-    public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, E blockEntity) {
+    @SuppressWarnings("unchecked")
+    public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, BlockEntity blockEntity) {
         super(menuType, id);
-        this.blockEntity = blockEntity;
+        this.blockEntity = (E) blockEntity;
         level = inventory.player.level;
         this.slotCount = slotCount;
         addPlayerInventory(inventory);
@@ -33,6 +36,11 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
         if(slotCount > 0) {
             checkContainerSize(inventory, slotCount);
             this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> addSlot(new SlotItemHandler(handler, 0, 80, 37)));
+        }
+
+        if(blockEntity instanceof HasManaStorage entity) {
+            System.out.println(entity.getManaStorage().getManaStoredFraction() + " " + entity);
+            System.out.println(Arrays.toString(new Exception().getStackTrace()));
         }
     }
 
@@ -74,7 +82,6 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
         return player.distanceToSqr(blockEntity.getBlockPos().getX() + 0.5, blockEntity.getBlockPos().getY() + 0.5, blockEntity.getBlockPos().getZ() + 0.5) <= 64.0;
     }
 
-    //TODO doesn't return the correct BlockEntity
     public E getBlockEntity() {
         return blockEntity;
     }

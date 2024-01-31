@@ -1,5 +1,6 @@
 package me.auoggi.manastorage;
 
+import me.auoggi.manastorage.block.entity.storageBlock.*;
 import me.auoggi.manastorage.screen.BasicImporterMenu;
 import me.auoggi.manastorage.screen.ManaStorageBlockMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -14,7 +15,7 @@ public class ModMenuTypes {
 
     public static final RegistryObject<MenuType<BasicImporterMenu>> basicImporter = menus.register("basic_mana_importer_menu", () -> IForgeMenuType.create(BasicImporterMenu::new));
 
-    public static final RegistryObject<MenuType<ManaStorageBlockMenu<?>>> manaStorageBlock = menus.register("mana_storage_block", () -> IForgeMenuType.create(ManaStorageBlockMenu::new));
+    public static final RegistryObject<MenuType<ManaStorageBlockMenu>> manaStorageBlock = menus.register("mana_storage_block", () -> IForgeMenuType.create(ManaStorageBlockMenu::new));
 
     public static void register(IEventBus eventBus) {
         menus.register(eventBus);

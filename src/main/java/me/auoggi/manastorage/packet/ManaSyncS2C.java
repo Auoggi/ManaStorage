@@ -1,5 +1,6 @@
 package me.auoggi.manastorage.packet;
 
+import me.auoggi.manastorage.base.HasManaStorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -29,6 +30,12 @@ public class ManaSyncS2C {
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
+            if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof HasManaStorage blockEntity) {
+                blockEntity.getManaStorage().setMana(mana);
+                System.out.println("packet received");
+            }
+
+            //Should be removed soon
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof BasicImporterBlockEntity blockEntity) {
                 blockEntity.getManaStorage().setMana(mana);
             }
