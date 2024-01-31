@@ -38,7 +38,7 @@ public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends Abstrac
         int y = (height - imageHeight) / 2;
 
         if(menu.getBlockEntity() instanceof HasEnergyStorage entity) energyInfoArea = new EnergyInfoArea(x + 149, y + 12, entity.getEnergyStorage());
-        if(menu.getBlockEntity() instanceof HasManaStorage entity) manaInfoArea = new ManaInfoArea(x + 12, y + 12, entity.getManaStorage());
+        if(menu.getBlockEntity() instanceof HasManaStorage entity) manaInfoArea = new ManaInfoArea(x + (energyInfoArea != null ? 12 : 149), y + 12, entity.getManaStorage());
     }
 
     @Override

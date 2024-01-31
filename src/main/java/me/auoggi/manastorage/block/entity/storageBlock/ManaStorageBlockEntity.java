@@ -4,6 +4,7 @@ import me.auoggi.manastorage.ModPackets;
 import me.auoggi.manastorage.base.BaseBlockEntity;
 import me.auoggi.manastorage.base.HasManaStorage;
 import me.auoggi.manastorage.packet.ManaSyncS2C;
+import me.auoggi.manastorage.screen.ManaStorageBlockMenu;
 import me.auoggi.manastorage.util.ModManaStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +22,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ManaStorageBlockEntity extends BaseBlockEntity implements HasManaStorage {
+public class ManaStorageBlockEntity extends BaseBlockEntity implements HasManaStorage {
     private final String displayName;
     private final ModManaStorage manaStorage;
 
@@ -75,5 +76,7 @@ public abstract class ManaStorageBlockEntity extends BaseBlockEntity implements 
 
     @Nullable
     @Override
-    public abstract AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player);
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
+        return new ManaStorageBlockMenu(id, inventory, this);
+    }
 }

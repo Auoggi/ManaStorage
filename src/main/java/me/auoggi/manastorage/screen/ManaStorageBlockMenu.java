@@ -6,12 +6,13 @@ import me.auoggi.manastorage.block.entity.storageBlock.ManaStorageBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 
-public class ManaStorageBlockMenu<E extends ManaStorageBlockEntity> extends BaseContainerMenu<E> {
+public class ManaStorageBlockMenu extends BaseContainerMenu<ManaStorageBlockEntity> {
     public ManaStorageBlockMenu(int id, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         super(id, inventory, 0, ModMenuTypes.manaStorageBlock.get(), friendlyByteBuf);
+
     }
 
-    public ManaStorageBlockMenu(int id, Inventory inventory, E blockEntity) {
+    public ManaStorageBlockMenu(int id, Inventory inventory, ManaStorageBlockEntity blockEntity) {
         super(id, inventory, 0, ModMenuTypes.manaStorageBlock.get(), blockEntity);
     }
 }
