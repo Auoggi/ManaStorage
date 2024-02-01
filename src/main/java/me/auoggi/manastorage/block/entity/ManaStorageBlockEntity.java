@@ -1,4 +1,4 @@
-package me.auoggi.manastorage.block.entity.storageBlock;
+package me.auoggi.manastorage.block.entity;
 
 import me.auoggi.manastorage.ModPackets;
 import me.auoggi.manastorage.base.BaseBlockEntity;
