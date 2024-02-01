@@ -2,7 +2,7 @@ package me.auoggi.manastorage.screen;
 
 import me.auoggi.manastorage.ModMenuTypes;
 import me.auoggi.manastorage.base.BaseContainerMenu;
-import me.auoggi.manastorage.block.entity.storageBlock.ManaStorageBlockEntity;
+import me.auoggi.manastorage.block.entity.ManaStorageBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 
