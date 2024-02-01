@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "manastorage:block/storage_block/4m"
+  }
+}

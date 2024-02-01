@@ -52,7 +52,7 @@ public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends Abstrac
             renderTooltip(poseStack, List.of(manaInfoArea.getTooltip()), Optional.empty(), mouseX - x, mouseY - y);
         }
 
-        if(energyInfoArea == null) this.font.draw(poseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        this.font.draw(poseStack, this.title, (float)this.titleLabelX + (energyInfoArea == null ? 0 : 25), (float)this.titleLabelY, 4210752);
     }
 
     @Override
