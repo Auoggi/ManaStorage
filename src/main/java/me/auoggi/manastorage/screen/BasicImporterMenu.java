@@ -36,9 +36,6 @@ public class BasicImporterMenu extends AbstractContainerMenu {
         addPlayerInventory(inventory);
 
         this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> addSlot(new SlotItemHandler(handler, 0, 80, 37)));
-
-        System.out.println(this.blockEntity.getManaStorage().getManaStoredFraction() + " " + this.blockEntity);
-        System.out.println(Arrays.toString(new Exception().getStackTrace()));
     }
 
     private static final int blockEntitySlotCount = 1;
@@ -70,12 +67,12 @@ public class BasicImporterMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory playerInventory) {
         for(int i = 0; i < 3; ++i) {
             for(int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 86 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 84 + i * 18));
             }
         }
 
         for(int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
     }
 

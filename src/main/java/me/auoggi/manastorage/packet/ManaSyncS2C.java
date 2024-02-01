@@ -32,7 +32,6 @@ public class ManaSyncS2C {
         supplier.get().enqueueWork(() -> {
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof HasManaStorage blockEntity) {
                 blockEntity.getManaStorage().setMana(mana);
-                System.out.println("packet received");
             }
 
             //Should be removed soon

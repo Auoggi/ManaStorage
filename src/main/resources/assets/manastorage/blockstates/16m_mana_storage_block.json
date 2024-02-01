@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "manastorage:block/16m_mana_storage_block" }
+  }
+}

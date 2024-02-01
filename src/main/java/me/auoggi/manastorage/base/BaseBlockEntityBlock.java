@@ -44,7 +44,6 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
 
                 if(entity instanceof HasManaStorage entityWithManaStorage) {
                     ModPackets.sendToClients(new ManaSyncS2C(entityWithManaStorage.getManaStorage().getManaStored(), entity.getBlockPos()));
-                    System.out.println("packet sent");
                 }
 
                 NetworkHooks.openGui((ServerPlayer) player, entity, blockPos);
