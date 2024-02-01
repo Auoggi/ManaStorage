@@ -1,9 +1,8 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
-import me.auoggi.manastorage.packet.ManaStorageCoreClientDataS2C;
+import me.auoggi.manastorage.packet.CoreDataSyncS2C;
 import me.auoggi.manastorage.screen.BasicImporterScreen;
-import me.auoggi.manastorage.screen.ManaStorageBlockMenu;
 import me.auoggi.manastorage.screen.ManaStorageBlockScreen;
 import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.CoreData;
@@ -11,7 +10,6 @@ import me.auoggi.manastorage.util.ModManaItem;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -115,7 +113,7 @@ public class ManaStorage {
                     serverCoreData.remove(entry.getKey());
                 }
             }
-            ModPackets.sendToClients(new ManaStorageCoreClientDataS2C(dimension, serverCoreData));
+            ModPackets.sendToClients(new CoreDataSyncS2C(dimension, serverCoreData));
         }
     }
 }
