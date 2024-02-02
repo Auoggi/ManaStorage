@@ -27,22 +27,52 @@ public class ModBlocks {
             () -> new BasicImporterBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)));
 
     public static final RegistryObject<Block> manaStorageBlock1m = registerBlock("1m_mana_storage_block",
-            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f), ModBlockEntities.manaStorageBlock1m.get(), "block.manastorage.1m_mana_storage_block", 1000000));
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock1m.get(), blockPos, blockState, "block.manastorage.1m_mana_storage_block", 1000000);
+                }
+            });
 
     public static final RegistryObject<Block> manaStorageBlock4m = registerBlock("4m_mana_storage_block",
-            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f), ModBlockEntities.manaStorageBlock4m.get(), "block.manastorage.4m_mana_storage_block", 4000000));
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock4m.get(), blockPos, blockState, "block.manastorage.4m_mana_storage_block", 4000000);
+                }
+            });
 
     public static final RegistryObject<Block> manaStorageBlock16m = registerBlock("16m_mana_storage_block",
-            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f), ModBlockEntities.manaStorageBlock16m.get(), "block.manastorage.16m_mana_storage_block", 16000000));
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock16m.get(), blockPos, blockState, "block.manastorage.16m_mana_storage_block", 16000000);
+                }
+            });
 
     public static final RegistryObject<Block> manaStorageBlock64m = registerBlock("64m_mana_storage_block",
-            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f), ModBlockEntities.manaStorageBlock64m.get(), "block.manastorage.64m_mana_storage_block", 64000000));
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock64m.get(), blockPos, blockState, "block.manastorage.64m_mana_storage_block", 64000000);
+                }
+            });
 
     public static final RegistryObject<Block> manaStorageBlock256m = registerBlock("256m_mana_storage_block",
-            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f), ModBlockEntities.manaStorageBlock256m.get(), "block.manastorage.256m_mana_storage_block", 256000000));
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock256m.get(), blockPos, blockState, "block.manastorage.256m_mana_storage_block", 256000000);
+                }
+            });
 
     public static final RegistryObject<Block> manaStorageBlock1024m = registerBlock("1024m_mana_storage_block",
-            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f), ModBlockEntities.manaStorageBlock1024m.get(), "block.manastorage.1024m_mana_storage_block", 1024000000));
+            () -> new ManaStorageBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock1024m.get(), blockPos, blockState, "block.manastorage.1024m_mana_storage_block", 1024000000);
+                }
+            });
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = blocks.register(name, block);
