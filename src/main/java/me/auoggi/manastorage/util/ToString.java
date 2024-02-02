@@ -5,7 +5,7 @@ import net.minecraft.core.GlobalPos;
 
 public class ToString {
     public static String globalPos(GlobalPos globalPos) {
-        return globalPos != null ? blockPos(globalPos.pos()) : "";
+        return globalPos != null ? blockPos(globalPos.pos()) + " in " + globalPos.dimension().location() : "";
     }
 
     public static String blockPos(BlockPos blockPos) {
@@ -30,6 +30,6 @@ public class ToString {
             }
         }
 
-        return output;
+        return output.replace(".0", "");
     }
 }
