@@ -2,10 +2,10 @@
   "parent": "block/block",
   "textures": {
     "front": "manastorage:block/importer/front_basic",
-    "back": "manastorage:block/side",
-    "top": "manastorage:block/side",
-    "side": "manastorage:block/side",
-    "particle": "manastorage:block/side"
+    "back": "manastorage:block/side_basic",
+    "top": "manastorage:block/side_basic",
+    "side": "manastorage:block/side_basic",
+    "particle": "manastorage:block/side_basic"
   },
   "elements": [
     {   "from": [ 0, 0, 0 ],
