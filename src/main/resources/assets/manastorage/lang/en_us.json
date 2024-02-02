@@ -2,16 +2,12 @@
     "itemGroup.manastorage_creative_mode_tab": "ManaStorage",
 
     "hovertext.manastorage.bound": "Bound to: ",
-    "hovertext.manastorage.bound_not_loaded": "Bounded ManaStorage Core is not loaded.",
-    "hovertext.manastorage.bound_not_powered": "Bounded ManaStorage Core is not powered.",
     "hovertext.manastorage.not_bound": "Not yet bound.",
-
-    "item.manastorage.test_item": "Test Item, But Mana",
+    "hovertext.manastorage.bound_not_loaded": "Bounded block is not loaded.",
+    "hovertext.manastorage.bound_not_powered": "Bounded block is not powered.",
 
     "item.manastorage.manastorage_tablet": "ManaStorage Tablet",
     "item.manastorage.network_linker": "Network Linker",
-
-    "block.manastorage.test_block": "Test Block, But Mana",
 
     "block.manastorage.storage_core": "ManaStorage Core",
 
