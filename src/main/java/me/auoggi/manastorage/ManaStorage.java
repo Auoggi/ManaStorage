@@ -33,7 +33,7 @@ import java.util.*;
 public class ManaStorage {
     public static final String MODID = "manastorage";
 
-    public static Map<ResourceKey<Level>, Map<BlockPos, CoreData>> clientCoreData = new HashMap<>();
+    public static final Map<String, Map<BlockPos, CoreData>> clientCoreData = new HashMap<>();
 
     public static final Map<ResourceKey<Level>, List<BlockPos>> pendingLoadedBlockEntities = new HashMap<>();
 
@@ -48,9 +48,9 @@ public class ManaStorage {
     public ManaStorage() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModBlockEntities.register(eventBus);
         ModBlocks.register(eventBus);
         ModItems.register(eventBus);
+        ModBlockEntities.register(eventBus);
         ModMenuTypes.register(eventBus);
 
         eventBus.addListener(this::commonSetup);
@@ -113,7 +113,7 @@ public class ManaStorage {
                     serverCoreData.remove(entry.getKey());
                 }
             }
-            ModPackets.sendToClients(new CoreDataSyncS2C(dimension, serverCoreData));
+            ModPackets.sendToClients(new CoreDataSyncS2C(dimension.toString(), serverCoreData));
         }
     }
 }
