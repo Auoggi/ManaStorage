@@ -23,9 +23,6 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final DeferredRegister<Block> blocks = DeferredRegister.create(ForgeRegistries.BLOCKS, ManaStorage.MODID);
 
-    public static final RegistryObject<Block> testBlock = registerBlock("test_block",
-            () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)));
-
     public static final RegistryObject<Block> basicImporter = registerBlock("basic_mana_importer",
             () -> new BasicImporterBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f)));
 

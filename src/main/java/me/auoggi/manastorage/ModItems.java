@@ -11,9 +11,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModItems {
     public static final DeferredRegister<Item> items = DeferredRegister.create(ForgeRegistries.ITEMS, ManaStorage.MODID);
 
-    public static final RegistryObject<Item> testItem = items.register("test_item",
-            () -> new Item(new Item.Properties().tab(ModCreativeModeTab.CREATIVE_MODE_TAB).stacksTo(1)));
-
     public static final RegistryObject<Item> linker = items.register("network_linker",
             () -> new Linker(new Item.Properties().tab(ModCreativeModeTab.CREATIVE_MODE_TAB).stacksTo(1)));
 
