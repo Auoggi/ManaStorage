@@ -1,6 +1,5 @@
 package me.auoggi.manastorage;
 
-import me.auoggi.manastorage.block.entity.storageBlock.*;
 import me.auoggi.manastorage.screen.BasicImporterMenu;
 import me.auoggi.manastorage.screen.ManaStorageBlockMenu;
 import net.minecraft.world.inventory.MenuType;

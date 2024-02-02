@@ -2,7 +2,6 @@ package me.auoggi.manastorage.screen;
 
 import me.auoggi.manastorage.ModBlocks;
 import me.auoggi.manastorage.ModMenuTypes;
-import me.auoggi.manastorage.base.HasManaStorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,8 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 
 public class BasicImporterMenu extends AbstractContainerMenu {
     public final BasicImporterBlockEntity blockEntity;

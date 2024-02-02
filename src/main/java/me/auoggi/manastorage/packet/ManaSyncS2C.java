@@ -34,7 +34,7 @@ public class ManaSyncS2C {
                 blockEntity.getManaStorage().setMana(mana);
             }
 
-            //Should be removed soon
+            //TODO Should be removed soon
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof BasicImporterBlockEntity blockEntity) {
                 blockEntity.getManaStorage().setMana(mana);
             }
