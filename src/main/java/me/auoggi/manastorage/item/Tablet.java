@@ -124,8 +124,8 @@ public class Tablet extends BaseBoundItem {
 
     private double manaFraction(ItemStack stack) {
         GlobalPos pos = bound(stack);
-        if(ManaStorage.clientCoreData.containsKey(pos.dimension())) {
-            Map<BlockPos, CoreData> map = ManaStorage.clientCoreData.get(pos.dimension());
+        if(ManaStorage.clientCoreData.containsKey(pos.dimension().toString())) {
+            Map<BlockPos, CoreData> map = ManaStorage.clientCoreData.get(pos.dimension().toString());
             if(map.containsKey(pos.pos())) {
                 return map.get(pos.pos()).powered() ? map.get(pos.pos()).manaFraction() : 0;
             }

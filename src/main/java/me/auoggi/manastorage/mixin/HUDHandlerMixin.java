@@ -40,8 +40,8 @@ public class HUDHandlerMixin {
             ModBoundItem modBoundItem = ModBoundItem.of(stack);
             if(modManaItem != null && modBoundItem != null) {
                 GlobalPos binding = modBoundItem.getBinding();
-                if(ManaStorage.clientCoreData.containsKey(binding.dimension()) && ManaStorage.clientCoreData.get(binding.dimension()).containsKey(binding.pos())) {
-                    CoreData data = ManaStorage.clientCoreData.get(binding.dimension()).get(binding.pos());
+                if(ManaStorage.clientCoreData.containsKey(binding.dimension().toString()) && ManaStorage.clientCoreData.get(binding.dimension().toString()).containsKey(binding.pos())) {
+                    CoreData data = ManaStorage.clientCoreData.get(binding.dimension().toString()).get(binding.pos());
                     if(data.powered()) {
                         totalMana += (int) data.mana();
                         totalMaxMana += (int) data.capacity();
@@ -55,13 +55,11 @@ public class HUDHandlerMixin {
         return returnList;
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "onDrawScreenPost", at = @At(value = "STORE", ordinal = 0), name = "totalMana")
     private static int totalMana(int value) {
         return value + manastorage$getValues().get(0);
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "onDrawScreenPost", at = @At(value = "STORE", ordinal = 0), name = "totalMaxMana")
     private static int totalMaxMana(int value) {
         return value + manastorage$getValues().get(1);

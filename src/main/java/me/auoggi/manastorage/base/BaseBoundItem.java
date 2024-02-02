@@ -105,7 +105,6 @@ public abstract class BaseBoundItem extends Item {
             if(LevelUtil.getBlockEntity(level, pos.pos()) instanceof BasicImporterBlockEntity entity) {
                 return entity;
             }
-            return null;
         }
         return null;
     }
@@ -113,7 +112,7 @@ public abstract class BaseBoundItem extends Item {
     protected boolean isBoundLoaded(ItemStack stack, MinecraftServer server) {
         if(isBound(stack)) {
             GlobalPos pos = bound(stack);
-            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos.dimension()) && ManaStorage.clientCoreData.get(pos.dimension()).containsKey(pos.pos());
+            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos.dimension().toString()) && ManaStorage.clientCoreData.get(pos.dimension().toString()).containsKey(pos.pos());
         }
         return false;
     }
@@ -125,8 +124,8 @@ public abstract class BaseBoundItem extends Item {
                 return bound != null && bound.getEnergyStorage().getEnergyStored() >= bound.energyUsage();
             } else {
                 GlobalPos pos = bound(stack);
-                if(ManaStorage.clientCoreData.containsKey(pos.dimension())) {
-                    Map<BlockPos, CoreData> map = ManaStorage.clientCoreData.get(pos.dimension());
+                if(ManaStorage.clientCoreData.containsKey(pos.dimension().toString())) {
+                    Map<BlockPos, CoreData> map = ManaStorage.clientCoreData.get(pos.dimension().toString());
                     if(map.containsKey(pos.pos())) {
                         return map.get(pos.pos()).powered();
                     }
