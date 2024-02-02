@@ -14,7 +14,6 @@ import me.auoggi.manastorage.util.ModItemStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;

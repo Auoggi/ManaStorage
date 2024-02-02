@@ -52,7 +52,6 @@ public abstract class ManaItemHandlerImplMixin {
         return toReturn;
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "requestMana", at = @At(value = "STORE", ordinal = 0), name = "manaReceived")
     private int requestMana(int value, ItemStack stack, Player player, int manaToGet, boolean remove) {
         MinecraftServer server = player.getServer();
@@ -79,7 +78,6 @@ public abstract class ManaItemHandlerImplMixin {
         return value;
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "requestManaExact", at = @At(value = "STORE", ordinal = 0), name = "manaReceived")
     private int requestManaExact0(int value, ItemStack stack, Player player, int manaToGet, boolean remove) {
         MinecraftServer server = player.getServer();
@@ -161,7 +159,6 @@ public abstract class ManaItemHandlerImplMixin {
         }
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "getInvocationCountForTool", at = @At(value = "STORE", ordinal = 0), name = "invocations")
     private int getInvocationCountForTool(int value, ItemStack stack, Player player, int manaToGet) {
         MinecraftServer server = player.getServer();

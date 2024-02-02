@@ -31,7 +31,7 @@ public abstract class EntityManaSparkMixin {
     private final List<Player> manastorage$receivingPlayers = new ArrayList<>();
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 1, shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void tick0(CallbackInfo ci, ISparkAttachable tile, IManaReceiver receiver, SparkUpgradeType upgrade, Collection<IManaSpark> transfers, List<Player> players, Map<Player, Map<IManaItem, Integer>> receivingPlayers, ItemStack input, Iterator iterator1, Player player, List<ItemStack> stacks) {
+    private void tick0(CallbackInfo ci, ISparkAttachable tile, IManaReceiver receiver, SparkUpgradeType upgrade, Collection<IManaSpark> transfers, List<Player> players, Map<Player, Map<IManaItem, Integer>> receivingPlayers, ItemStack input, Iterator<ItemStack> iterator1, Player player, List<ItemStack> stacks) {
         List<ItemStack> manaItems = new ArrayList<>();
 
         for(ItemStack stack : stacks) {

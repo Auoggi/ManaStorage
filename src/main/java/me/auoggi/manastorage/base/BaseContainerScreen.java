@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.screen.render.EnergyInfoArea;
 import me.auoggi.manastorage.screen.render.ManaInfoArea;
-import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.MouseUtil;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -52,7 +51,8 @@ public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends Abstrac
             renderTooltip(poseStack, List.of(manaInfoArea.getTooltip()), Optional.empty(), mouseX - x, mouseY - y);
         }
 
-        this.font.draw(poseStack, this.title, (float)this.titleLabelX + (energyInfoArea == null ? 0 : 25), (float)this.titleLabelY, 4210752);
+        //If there is both an energyInfoArea and a manaInfoArea title should be added on a case by case basis
+        if(energyInfoArea == null || manaInfoArea == null) this.font.draw(poseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
     }
 
     @Override

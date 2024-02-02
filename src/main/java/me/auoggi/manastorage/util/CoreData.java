@@ -1,8 +1,8 @@
 package me.auoggi.manastorage.util;
 
-import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 
+//TODO Replace BasicImporter with Core when added
 public record CoreData(boolean powered, long mana, long capacity, double manaFraction) {
     public static CoreData of(BasicImporterBlockEntity entity) {
         return new CoreData(
