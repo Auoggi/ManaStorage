@@ -3,6 +3,7 @@ package me.auoggi.manastorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import me.auoggi.manastorage.packet.CoreDataSyncS2C;
 import me.auoggi.manastorage.screen.BasicImporterScreen;
+import me.auoggi.manastorage.screen.CoreScreen;
 import me.auoggi.manastorage.screen.ManaStorageBlockScreen;
 import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.CoreData;
@@ -65,6 +66,8 @@ public class ManaStorage {
 
     public void clientSetup(final FMLClientSetupEvent event) {
         MenuScreens.register(ModMenuTypes.basicImporter.get(), BasicImporterScreen::new);
+
+        MenuScreens.register(ModMenuTypes.core.get(), CoreScreen::new);
 
         MenuScreens.register(ModMenuTypes.manaStorageBlock.get(), ManaStorageBlockScreen::new);
 

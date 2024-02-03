@@ -63,17 +63,7 @@ public abstract class BaseBlockEntity extends BlockEntity implements MenuProvide
     protected abstract void invalidateCapabilities();
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BaseBlockEntity blockEntity) {
-        if(level.isClientSide()) return;
-
         blockEntity.tick(level, blockPos, blockState);
-
-        if(blockEntity instanceof HasEnergyStorage entity) {
-            ModPackets.sendToClients(new EnergySyncS2C(entity.getEnergyStorage().getEnergyStored(), blockPos));
-        }
-
-        if(blockEntity instanceof HasManaStorage entity) {
-            ModPackets.sendToClients(new ManaSyncS2C(entity.getManaStorage().getManaStored(), blockPos));
-        }
     }
 
     protected abstract void tick(Level level, BlockPos blockPos, BlockState blockState);

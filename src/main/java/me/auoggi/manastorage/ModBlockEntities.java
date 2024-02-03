@@ -1,6 +1,7 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
+import me.auoggi.manastorage.block.entity.CoreEntity;
 import me.auoggi.manastorage.block.entity.ManaStorageBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -14,6 +15,9 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BasicImporterBlockEntity>> basicImporter = blockEntities.register("basic_mana_importer_block_entity",
             () -> BlockEntityType.Builder.of(BasicImporterBlockEntity::new, ModBlocks.basicImporter.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<CoreEntity>> core = blockEntities.register("storage_core",
+            () -> BlockEntityType.Builder.of(CoreEntity::new, ModBlocks.core.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<ManaStorageBlockEntity>> manaStorageBlock1m = blockEntities.register("1m_mana_storage_block",
             () -> BlockEntityType.Builder.of((pos, state) -> new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock1m.get(), pos, state, "block.manastorage.1m_mana_storage_block", 1000000), ModBlocks.manaStorageBlock1m.get()).build(null));

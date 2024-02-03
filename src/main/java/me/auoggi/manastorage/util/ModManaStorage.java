@@ -28,6 +28,10 @@ public abstract class ModManaStorage {
         return mana >= capacity;
     }
 
+    public ModManaStorage() {
+        this(0);
+    }
+
     public ModManaStorage(long capacity) {
         this.capacity = capacity;
     }
@@ -54,7 +58,7 @@ public abstract class ModManaStorage {
 
     //Do not use without calling onManaChanged(), except for syncing between server and client.
     public void setMana(long mana) {
-        this.mana = Math.max(0, mana);
+        this.mana = Math.max(0, Math.min(capacity, mana));
     }
 
     public abstract void onManaChanged();
