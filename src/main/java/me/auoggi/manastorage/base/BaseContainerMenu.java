@@ -33,6 +33,7 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
 
         if(slotCount > 0) {
             checkContainerSize(inventory, slotCount);
+            //TODO add support for actually adding slots
             this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> addSlot(new SlotItemHandler(handler, 0, 80, 37)));
         }
     }
