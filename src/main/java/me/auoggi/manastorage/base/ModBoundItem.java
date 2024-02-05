@@ -1,4 +1,4 @@
-package me.auoggi.manastorage.util;
+package me.auoggi.manastorage.base;
 
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.item.ItemStack;

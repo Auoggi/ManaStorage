@@ -1,6 +1,6 @@
 package me.auoggi.manastorage.mixin;
 
-import me.auoggi.manastorage.util.ModManaItem;
+import me.auoggi.manastorage.base.ModManaItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.item.ItemEntity;

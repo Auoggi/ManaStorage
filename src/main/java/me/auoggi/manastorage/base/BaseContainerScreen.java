@@ -3,8 +3,8 @@ package me.auoggi.manastorage.base;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.auoggi.manastorage.ManaStorage;
-import me.auoggi.manastorage.screen.render.EnergyInfoArea;
-import me.auoggi.manastorage.screen.render.ManaInfoArea;
+import me.auoggi.manastorage.util.EnergyInfoArea;
+import me.auoggi.manastorage.util.ManaInfoArea;
 import me.auoggi.manastorage.util.MouseUtil;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -18,8 +18,8 @@ import java.util.Optional;
 
 public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends AbstractContainerScreen<M> {
     private final ResourceLocation texture;
-    private EnergyInfoArea energyInfoArea = null;
-    private ManaInfoArea manaInfoArea = null;
+    protected EnergyInfoArea energyInfoArea = null;
+    protected ManaInfoArea manaInfoArea = null;
 
     public BaseContainerScreen(M menu, Inventory inventory, Component component, String texture) {
         super(menu, inventory, component);
@@ -32,7 +32,7 @@ public class BaseContainerScreen<M extends BaseContainerMenu<?>> extends Abstrac
         assignInfoAreas();
     }
 
-    private void assignInfoAreas() {
+    protected void assignInfoAreas() {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 

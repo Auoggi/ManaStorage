@@ -27,8 +27,6 @@ public class LevelMixin {
 
     @Inject(method = "tickBlockEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/TickingBlockEntity;tick()V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void tickBlockEntity(CallbackInfo ci, ProfilerFiller profilerfiller, Iterator<TickingBlockEntity> iterator, TickingBlockEntity tickingblockentity) {
-        GlobalPos pos = GlobalPos.of(dimension, tickingblockentity.getPos());
-
         List<BlockPos> blockPosList = ManaStorage.pendingLoadedBlockEntities.containsKey(dimension) ? ManaStorage.pendingLoadedBlockEntities.get(dimension) : new ArrayList<>();
         blockPosList.add(tickingblockentity.getPos());
 

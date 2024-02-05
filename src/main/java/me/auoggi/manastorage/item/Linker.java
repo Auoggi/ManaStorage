@@ -1,7 +1,7 @@
 package me.auoggi.manastorage.item;
 
 import me.auoggi.manastorage.base.BaseBoundItem;
-import me.auoggi.manastorage.util.ModCapability;
+import me.auoggi.manastorage.base.ModCapability;
 import me.auoggi.manastorage.util.ModCapabilityProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;

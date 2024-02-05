@@ -4,7 +4,6 @@ import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.LevelUtil;
-import me.auoggi.manastorage.util.ModBoundItem;
 import me.auoggi.manastorage.util.ToString;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

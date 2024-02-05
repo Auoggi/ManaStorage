@@ -1,7 +1,7 @@
 package me.auoggi.manastorage.mixin;
 
 import com.google.common.collect.Iterables;
-import me.auoggi.manastorage.util.ModManaItem;
+import me.auoggi.manastorage.base.ModManaItem;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

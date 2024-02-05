@@ -1,6 +1,6 @@
 package me.auoggi.manastorage.mixin;
 
-import me.auoggi.manastorage.util.ModManaItem;
+import me.auoggi.manastorage.base.ModManaItem;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

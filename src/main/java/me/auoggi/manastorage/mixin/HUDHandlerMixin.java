@@ -3,8 +3,8 @@ package me.auoggi.manastorage.mixin;
 import com.google.common.collect.Iterables;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.util.CoreData;
-import me.auoggi.manastorage.util.ModBoundItem;
-import me.auoggi.manastorage.util.ModManaItem;
+import me.auoggi.manastorage.base.ModBoundItem;
+import me.auoggi.manastorage.base.ModManaItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +40,7 @@ public class HUDHandlerMixin {
             ModBoundItem modBoundItem = ModBoundItem.of(stack);
             if(modManaItem != null && modBoundItem != null) {
                 GlobalPos binding = modBoundItem.getBinding();
+                if(binding == null) continue;
                 if(ManaStorage.clientCoreData.containsKey(binding.dimension().toString()) && ManaStorage.clientCoreData.get(binding.dimension().toString()).containsKey(binding.pos())) {
                     CoreData data = ManaStorage.clientCoreData.get(binding.dimension().toString()).get(binding.pos());
                     if(data.powered()) {

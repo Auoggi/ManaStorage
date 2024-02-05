@@ -1,4 +1,4 @@
-package me.auoggi.manastorage.util;
+package me.auoggi.manastorage.base;
 
 import me.auoggi.manastorage.ModCapabilities;
 import net.minecraft.server.MinecraftServer;
