@@ -3,7 +3,7 @@ package me.auoggi.manastorage.item;
 import me.auoggi.manastorage.ManaStorage;
 import me.auoggi.manastorage.ModCapabilities;
 import me.auoggi.manastorage.base.BaseBoundItem;
-import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
+import me.auoggi.manastorage.block.entity.CoreEntity;
 import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.base.ModCapability;
 import me.auoggi.manastorage.util.ModCapabilityProvider;
@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
-//TODO Replace BasicImporter with Core when added
 public class Tablet extends BaseBoundItem {
     public Tablet(Properties properties) {
         super(properties);
@@ -55,37 +54,37 @@ public class Tablet extends BaseBoundItem {
 
         @Override
         public long getManaStored(MinecraftServer server) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
+            CoreEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getManaStored() : 0;
         }
 
         @Override
         public double getManaStoredFraction(MinecraftServer server) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
+            CoreEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getManaStoredFraction() : 0;
         }
 
         @Override
         public long getFullCapacity(MinecraftServer server) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
+            CoreEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getFullCapacity() : 0;
         }
 
         @Override
         public long getRemainingCapacity(MinecraftServer server) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
+            CoreEntity bound = getBound(stack, server);
             return isBoundLoadedAndPowered(stack, server) && bound != null ? bound.getManaStorage().getRemainingCapacity() : 0;
         }
 
         @Override
         public boolean isEmpty(MinecraftServer server) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
+            CoreEntity bound = getBound(stack, server);
             return !isBoundLoadedAndPowered(stack, server) || bound == null || bound.getManaStorage().isEmpty();
         }
 
         @Override
         public boolean isFull(MinecraftServer server) {
-            BasicImporterBlockEntity bound = getBound(stack, server);
+            CoreEntity bound = getBound(stack, server);
             return !isBoundLoadedAndPowered(stack, server) || bound == null || bound.getManaStorage().isFull();
         }
 

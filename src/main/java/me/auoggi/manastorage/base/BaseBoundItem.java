@@ -1,7 +1,7 @@
 package me.auoggi.manastorage.base;
 
 import me.auoggi.manastorage.ManaStorage;
-import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
+import me.auoggi.manastorage.block.entity.CoreEntity;
 import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.ToString;
@@ -29,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-//TODO Replace BasicImporter with Core when added
 public abstract class BaseBoundItem extends Item {
     public BaseBoundItem(Properties properties) {
         super(properties);
@@ -40,7 +39,7 @@ public abstract class BaseBoundItem extends Item {
         Player player = context.getPlayer();
         Level level = context.getLevel();
 
-        if(player.isShiftKeyDown() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof BasicImporterBlockEntity entity) {
+        if(player.isShiftKeyDown() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof CoreEntity entity) {
             bind(player.getItemInHand(player.getUsedItemHand()), entity);
             return InteractionResult.SUCCESS;
         }
@@ -77,7 +76,7 @@ public abstract class BaseBoundItem extends Item {
         }
     }
 
-    private void bind(ItemStack stack, BasicImporterBlockEntity entity) {
+    private void bind(ItemStack stack, CoreEntity entity) {
         if(entity.getLevel() != null) {
             GlobalPos pos = GlobalPos.of(entity.getLevel().dimension(), entity.getBlockPos());
             Tag nbt = GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos).get().orThrow();
@@ -97,11 +96,11 @@ public abstract class BaseBoundItem extends Item {
         return GlobalPos.CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().get("bound")).result().filter(position -> position.pos().getY() != Integer.MIN_VALUE).orElse(null);
     }
 
-    protected BasicImporterBlockEntity getBound(ItemStack stack, MinecraftServer server) {
+    protected CoreEntity getBound(ItemStack stack, MinecraftServer server) {
         if(isBound(stack) && server != null) {
             GlobalPos pos = bound(stack);
             Level level = server.getLevel(pos.dimension());
-            if(LevelUtil.getBlockEntity(level, pos.pos()) instanceof BasicImporterBlockEntity entity) {
+            if(LevelUtil.getBlockEntity(level, pos.pos()) instanceof CoreEntity entity) {
                 return entity;
             }
         }
@@ -119,7 +118,7 @@ public abstract class BaseBoundItem extends Item {
     protected boolean isBoundPowered(ItemStack stack, MinecraftServer server) {
         if(isBound(stack)) {
             if(server != null) {
-                BasicImporterBlockEntity bound = getBound(stack, server);
+                CoreEntity bound = getBound(stack, server);
                 return bound != null && bound.getEnergyStorage().getEnergyStored() >= bound.energyUsage();
             } else {
                 GlobalPos pos = bound(stack);
