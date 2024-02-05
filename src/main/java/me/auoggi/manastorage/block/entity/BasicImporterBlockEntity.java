@@ -146,7 +146,7 @@ public class BasicImporterBlockEntity extends BlockEntity implements MenuProvide
         ModPackets.sendToClients(new EnergySyncS2C(energyStorage.getEnergyStored(), blockPos));*/
 
         Map<BlockPos, CoreData> map = !ManaStorage.pendingCoreData.isEmpty() ? ManaStorage.pendingCoreData.get(level.dimension()) : new HashMap<>();
-        map.put(blockPos, CoreData.of(this));
+        map.put(blockPos, CoreData.oldOf(this));
         ManaStorage.pendingCoreData.put(level.dimension(), map);
 
         if(energyStorage.extractEnergy(energyUsage(), false) >= energyUsage() && manaStorage.getRemainingCapacity() != 0)

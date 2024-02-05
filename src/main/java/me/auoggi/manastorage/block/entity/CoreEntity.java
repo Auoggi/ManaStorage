@@ -9,6 +9,7 @@ import me.auoggi.manastorage.base.HasManaStorage;
 import me.auoggi.manastorage.base.ModBindable;
 import me.auoggi.manastorage.packet.EnergySyncS2C;
 import me.auoggi.manastorage.screen.CoreMenu;
+import me.auoggi.manastorage.util.CoreData;
 import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.ModEnergyStorage;
 import me.auoggi.manastorage.util.ModManaStorage;
@@ -29,8 +30,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, HasManaStorage, ModBindable {
     private final List<HasManaStorage> connectedStorages = new ArrayList<>();
@@ -101,19 +101,41 @@ public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, Has
 
         @Override
         public long receiveMana(long mana, boolean simulate) {
-            return 0;
+            long receivedMana = 0;
+
+            //Sort by lowest to highest capacity
+            connectedStorages.sort(Comparator.comparingLong(storage -> storage.getManaStorage().getFullCapacity()));
+            for(HasManaStorage connectedStorage : connectedStorages) {
+                receivedMana += connectedStorage.getManaStorage().receiveMana(mana - receivedMana, simulate);
+
+                if(receivedMana >= mana) break;
+            }
+            return receivedMana;
         }
 
         @Override
         public long extractMana(long mana, boolean simulate) {
-            return 0;
+            long extractedMana = 0;
+
+            //Sort by highest to lowest capacity
+            connectedStorages.sort(Comparator.comparingLong(storage -> -storage.getManaStorage().getFullCapacity()));
+            for(HasManaStorage connectedStorage : connectedStorages) {
+                extractedMana += connectedStorage.getManaStorage().extractMana(mana - extractedMana, simulate);
+
+                if(extractedMana >= mana) break;
+            }
+            return extractedMana;
         }
 
         @Override
-        public void setMana(long mana) {}
+        public void setMana(long mana) {
+            //Doesn't do anything
+        }
 
         @Override
-        public void onManaChanged() {}
+        public void onManaChanged() {
+            //Maybe do something here
+        }
     };
 
     @Override
@@ -165,6 +187,10 @@ public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, Has
     protected void tick(Level level, BlockPos blockPos, BlockState blockState) {
         connectedStorages.clear();
         connectedStorages.addAll(getConnectedStorages(level, blockPos, new ArrayList<>()));
+
+        Map<BlockPos, CoreData> map = ManaStorage.pendingCoreData.containsKey(level.dimension()) ? ManaStorage.pendingCoreData.get(level.dimension()) : new HashMap<>();
+        map.put(blockPos, CoreData.of(this));
+        ManaStorage.pendingCoreData.put(level.dimension(), map);
     }
 
     private static List<HasManaStorage> getConnectedStorages(Level level, BlockPos pos, List<HasManaStorage> foundStorages) {
