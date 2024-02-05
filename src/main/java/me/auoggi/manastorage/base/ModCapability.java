@@ -1,4 +1,4 @@
-package me.auoggi.manastorage.util;
+package me.auoggi.manastorage.base;
 
 import net.minecraftforge.common.capabilities.Capability;
 

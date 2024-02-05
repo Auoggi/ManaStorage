@@ -1,5 +1,6 @@
 package me.auoggi.manastorage.util;
 
+import me.auoggi.manastorage.base.ModCapability;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;

@@ -1,14 +1,11 @@
 package me.auoggi.manastorage;
 
+import me.auoggi.manastorage.base.ModManaItem;
 import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
+import me.auoggi.manastorage.block.entity.CoreEntity;
 import me.auoggi.manastorage.packet.CoreDataSyncS2C;
-import me.auoggi.manastorage.screen.BasicImporterScreen;
-import me.auoggi.manastorage.screen.CoreScreen;
-import me.auoggi.manastorage.screen.ManaStorageBlockScreen;
-import me.auoggi.manastorage.util.LevelUtil;
 import me.auoggi.manastorage.util.CoreData;
-import me.auoggi.manastorage.util.ModManaItem;
-import net.minecraft.client.gui.screens.MenuScreens;
+import me.auoggi.manastorage.util.LevelUtil;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -65,11 +62,7 @@ public class ManaStorage {
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {
-        MenuScreens.register(ModMenuTypes.basicImporter.get(), BasicImporterScreen::new);
-
-        MenuScreens.register(ModMenuTypes.core.get(), CoreScreen::new);
-
-        MenuScreens.register(ModMenuTypes.manaStorageBlock.get(), ManaStorageBlockScreen::new);
+        ModMenuScreens.register();
 
         //Make tooltip image render if ItemStack has ModManaItem capability
         MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, (RenderTooltipEvent.Color e) -> {
@@ -112,7 +105,7 @@ public class ManaStorage {
             if(!serverCoreData.isEmpty()) entrySet.addAll(serverCoreData.entrySet());
 
             for(Map.Entry<BlockPos, CoreData> entry : entrySet) {
-                if(!(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof BasicImporterBlockEntity) || !loadedBlockEntities.contains(entry.getKey())) {
+                if((!(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof CoreEntity) && !(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof BasicImporterBlockEntity) /*TODO remove BasicImporterBlockEntity part soon*/) || !loadedBlockEntities.contains(entry.getKey())) {
                     serverCoreData.remove(entry.getKey());
                 }
             }

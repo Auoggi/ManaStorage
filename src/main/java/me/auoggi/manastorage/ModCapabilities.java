@@ -1,6 +1,6 @@
 package me.auoggi.manastorage;
 
-import me.auoggi.manastorage.util.ModManaItem;
+import me.auoggi.manastorage.base.ModManaItem;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
