@@ -2,7 +2,6 @@ package me.auoggi.manastorage.mixin;
 
 import me.auoggi.manastorage.ManaStorage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
@@ -27,7 +26,8 @@ public class LevelMixin {
 
     @Inject(method = "tickBlockEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/TickingBlockEntity;tick()V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void tickBlockEntity(CallbackInfo ci, ProfilerFiller profilerfiller, Iterator<TickingBlockEntity> iterator, TickingBlockEntity tickingblockentity) {
-        List<BlockPos> blockPosList = ManaStorage.pendingLoadedBlockEntities.containsKey(dimension) ? ManaStorage.pendingLoadedBlockEntities.get(dimension) : new ArrayList<>();
+        List<BlockPos> blockPosList = new ArrayList<>();
+        if(ManaStorage.pendingLoadedBlockEntities.containsKey(dimension)) blockPosList.addAll(ManaStorage.pendingLoadedBlockEntities.get(dimension));
         blockPosList.add(tickingblockentity.getPos());
 
         ManaStorage.pendingLoadedBlockEntities.put(dimension, blockPosList);
