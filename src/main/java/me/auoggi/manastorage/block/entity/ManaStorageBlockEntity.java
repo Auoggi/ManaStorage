@@ -40,8 +40,9 @@ public class ManaStorageBlockEntity extends BaseBlockEntity implements HasManaSt
     }
 
     @Override
-    protected void saveNbt(CompoundTag nbt) {
+    protected CompoundTag saveNbt(CompoundTag nbt) {
         nbt.putLong("Mana", manaStorage.getManaStored());
+        return nbt;
     }
 
     @Override
