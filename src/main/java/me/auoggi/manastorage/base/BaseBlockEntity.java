@@ -1,8 +1,5 @@
 package me.auoggi.manastorage.base;
 
-import me.auoggi.manastorage.ModPackets;
-import me.auoggi.manastorage.packet.EnergySyncS2C;
-import me.auoggi.manastorage.packet.ManaSyncS2C;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,11 +20,10 @@ public abstract class BaseBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag nbt) {
-        saveNbt(nbt);
-        super.saveAdditional(nbt);
+        super.saveAdditional(saveNbt(nbt));
     }
 
-    protected abstract void saveNbt(CompoundTag nbt);
+    protected abstract CompoundTag saveNbt(CompoundTag nbt);
 
     @Override
     public void load(@NotNull CompoundTag nbt) {

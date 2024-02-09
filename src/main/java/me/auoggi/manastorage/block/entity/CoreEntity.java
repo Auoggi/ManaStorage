@@ -154,8 +154,9 @@ public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, Has
     }
 
     @Override
-    protected void saveNbt(CompoundTag nbt) {
+    protected CompoundTag saveNbt(CompoundTag nbt) {
         nbt.putInt("Energy", energyStorage.getEnergyStored());
+        return nbt;
     }
 
     @Override
