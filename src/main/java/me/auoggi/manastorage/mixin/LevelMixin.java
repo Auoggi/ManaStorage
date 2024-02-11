@@ -24,12 +24,16 @@ import java.util.List;
 public class LevelMixin {
     @Shadow @Final private ResourceKey<Level> dimension;
 
+    @Shadow @Final public boolean isClientSide;
+
     @Inject(method = "tickBlockEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/TickingBlockEntity;tick()V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void tickBlockEntity(CallbackInfo ci, ProfilerFiller profilerfiller, Iterator<TickingBlockEntity> iterator, TickingBlockEntity tickingblockentity) {
-        List<BlockPos> blockPosList = new ArrayList<>();
-        if(ManaStorage.pendingLoadedBlockEntities.containsKey(dimension)) blockPosList.addAll(ManaStorage.pendingLoadedBlockEntities.get(dimension));
-        blockPosList.add(tickingblockentity.getPos());
+        if(!isClientSide) {
+            List<BlockPos> blockPosList = new ArrayList<>();
+            if(ManaStorage.pendingLoadedBlockEntities.containsKey(dimension)) blockPosList.addAll(ManaStorage.pendingLoadedBlockEntities.get(dimension));
+            blockPosList.add(tickingblockentity.getPos());
 
-        ManaStorage.pendingLoadedBlockEntities.put(dimension, blockPosList);
+            ManaStorage.pendingLoadedBlockEntities.put(dimension, blockPosList);
+        }
     }
 }
