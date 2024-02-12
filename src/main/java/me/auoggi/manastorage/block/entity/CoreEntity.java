@@ -35,7 +35,7 @@ import java.util.*;
 public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, HasManaStorage, ModBindable {
     private final List<HasManaStorage> connectedStorages = new ArrayList<>();
 
-    private final ModEnergyStorage energyStorage = new ModEnergyStorage(ManaStorage.advancedEnergyCapacity) {
+    private final ModEnergyStorage energyStorage = new ModEnergyStorage(ManaStorage.basicEnergyCapacity) {
         @Override
         public void onEnergyChanged() {
             setChanged();
@@ -50,12 +50,12 @@ public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, Has
 
     @Override
     public int energyUsage() {
-        return 0;
+        return ManaStorage.basicEnergyUsage;
     }
 
     @Override
     public boolean powered() {
-        return true;
+        return energyStorage.getEnergyStored() >= energyUsage();
     }
 
     private final ModManaStorage manaStorage = new ModManaStorage() {
@@ -192,6 +192,8 @@ public class CoreEntity extends BaseBlockEntity implements HasEnergyStorage, Has
         Map<BlockPos, CoreData> map = ManaStorage.pendingCoreData.containsKey(level.dimension()) ? ManaStorage.pendingCoreData.get(level.dimension()) : new HashMap<>();
         map.put(blockPos, CoreData.of(this));
         ManaStorage.pendingCoreData.put(level.dimension(), map);
+
+        energyStorage.extractEnergy(energyUsage(), false);
     }
 
     private static List<HasManaStorage> getConnectedStorages(Level level, BlockPos pos, List<HasManaStorage> foundStorages) {
