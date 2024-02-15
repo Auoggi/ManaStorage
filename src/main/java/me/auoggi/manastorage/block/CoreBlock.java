@@ -24,6 +24,7 @@ public class CoreBlock extends BaseBlockEntityBlock {
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
+        //noinspection DataFlowIssue
         return createTickerHelper(blockEntityType, ModBlockEntities.core.get(), level.isClientSide() ? null : CoreEntity::tick);
     }
 }

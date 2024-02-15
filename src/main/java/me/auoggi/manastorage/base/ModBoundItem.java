@@ -12,6 +12,7 @@ public interface ModBoundItem extends ICoordBoundItem {
 
     @Nullable
     static ModBoundItem of(ItemStack stack) {
+        //noinspection DataFlowIssue
         return stack.getCapability(BotaniaForgeCapabilities.COORD_BOUND_ITEM).orElse(null) instanceof ModBoundItem modBoundItem ? modBoundItem : null;
     }
 }
