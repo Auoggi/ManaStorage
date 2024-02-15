@@ -1,7 +1,6 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.base.ModManaItem;
-import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import me.auoggi.manastorage.block.entity.CoreEntity;
 import me.auoggi.manastorage.packet.CoreDataSyncS2C;
 import me.auoggi.manastorage.util.CoreData;
@@ -25,21 +24,19 @@ import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
-//TODO Block Upgrades
-//TODO Core, Importers, Exporters
+//TODO Importers, Exporters
 @Mod("manastorage")
 public class ManaStorage {
     public static final String MODID = "manastorage";
 
     public static final Map<String, Map<BlockPos, CoreData>> clientCoreData = new HashMap<>();
-
+    public static final Map<ResourceKey<Level>, List<BlockPos>> loadedBlockEntities = new HashMap<>();
     public static final Map<ResourceKey<Level>, List<BlockPos>> pendingLoadedBlockEntities = new HashMap<>();
-
     public static final Map<ResourceKey<Level>, Map<BlockPos, CoreData>> pendingCoreData = new HashMap<>();
 
     public static final long basicSpeed = 320;
     public static final int basicEnergyUsage = 16000;
-    public static final int advancedEnergyUsage = 160000;
+    public static final int advancedEnergyUsage = basicEnergyUsage * 10;
     public static final int basicEnergyCapacity = basicEnergyUsage * 100;
     public static final int advancedEnergyCapacity = advancedEnergyUsage * 100;
 
@@ -105,11 +102,12 @@ public class ManaStorage {
             if(!serverCoreData.isEmpty()) entrySet.addAll(serverCoreData.entrySet());
 
             for(Map.Entry<BlockPos, CoreData> entry : entrySet) {
-                if((!(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof CoreEntity) && !(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof BasicImporterBlockEntity) /*TODO remove BasicImporterBlockEntity part soon*/) || !loadedBlockEntities.contains(entry.getKey())) {
+                if(!(LevelUtil.getBlockEntity(serverLevel, entry.getKey()) instanceof CoreEntity) || !loadedBlockEntities.contains(entry.getKey())) {
                     serverCoreData.remove(entry.getKey());
                 }
             }
             ModPackets.sendToClients(new CoreDataSyncS2C(dimension.toString(), serverCoreData));
+            ManaStorage.loadedBlockEntities.put(dimension, loadedBlockEntities);
         }
     }
 }
