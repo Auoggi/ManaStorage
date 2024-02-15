@@ -39,7 +39,7 @@ public abstract class BaseBoundItem extends Item {
         Player player = context.getPlayer();
         Level level = context.getLevel();
 
-        if(player.isShiftKeyDown() && !level.isClientSide && level.getBlockEntity(context.getClickedPos()) instanceof CoreEntity entity) {
+        if(player.isShiftKeyDown() && !level.isClientSide() && level.getBlockEntity(context.getClickedPos()) instanceof CoreEntity entity) {
             bind(player.getItemInHand(player.getUsedItemHand()), entity);
             return InteractionResult.SUCCESS;
         }
@@ -50,7 +50,7 @@ public abstract class BaseBoundItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> stacks, @NotNull TooltipFlag flags) {
         if(isBound(stack)) {
-            if(isBoundLoaded(stack, null)) {
+            if(isBoundLoaded(stack, false)) {
                 if(isBoundPowered(stack, null)) {
                     stacks.add(new TranslatableComponent("hovertext.manastorage.bound").append(ToString.globalPos(bound(stack))).withStyle(ChatFormatting.GRAY));
                 } else {
@@ -71,7 +71,7 @@ public abstract class BaseBoundItem extends Item {
 
     @Override
     public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int slot, boolean selected) {
-        if(!level.isClientSide && isBoundLoaded(stack, level.getServer()) && getBound(stack, level.getServer()) == null) {
+        if(!level.isClientSide() && isBoundLoaded(stack, true) && getBound(stack, level.getServer()) == null) {
             stack.getOrCreateTag().remove("bound");
         }
     }
@@ -107,10 +107,10 @@ public abstract class BaseBoundItem extends Item {
         return null;
     }
 
-    protected boolean isBoundLoaded(ItemStack stack, MinecraftServer server) {
+    protected boolean isBoundLoaded(ItemStack stack, boolean server) {
         if(isBound(stack)) {
             GlobalPos pos = bound(stack);
-            return server != null ? server.getLevel(pos.dimension()).isLoaded(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos.dimension().toString()) && ManaStorage.clientCoreData.get(pos.dimension().toString()).containsKey(pos.pos());
+            return server ? ManaStorage.loadedBlockEntities.containsKey(pos.dimension()) && ManaStorage.loadedBlockEntities.get(pos.dimension()).contains(pos.pos()) : ManaStorage.clientCoreData.containsKey(pos.dimension().toString()) && ManaStorage.clientCoreData.get(pos.dimension().toString()).containsKey(pos.pos());
         }
         return false;
     }
@@ -119,7 +119,7 @@ public abstract class BaseBoundItem extends Item {
         if(isBound(stack)) {
             if(server != null) {
                 CoreEntity bound = getBound(stack, server);
-                return bound != null && bound.getEnergyStorage().getEnergyStored() >= bound.energyUsage();
+                return bound != null && bound.powered();
             } else {
                 GlobalPos pos = bound(stack);
                 if(ManaStorage.clientCoreData.containsKey(pos.dimension().toString())) {
@@ -134,7 +134,7 @@ public abstract class BaseBoundItem extends Item {
     }
 
     protected boolean isBoundLoadedAndPowered(ItemStack stack, MinecraftServer server) {
-        return isBoundLoaded(stack, server) && isBoundPowered(stack, server);
+        return isBoundLoaded(stack, server != null) && isBoundPowered(stack, server);
     }
 
     public class BoundItem implements ModBoundItem {
@@ -150,8 +150,14 @@ public abstract class BaseBoundItem extends Item {
             return pos != null && pos.dimension() == level.dimension() ? pos.pos() : null;
         }
 
+        @Override
         public GlobalPos getBinding() {
             return bound(stack);
+        }
+
+        @Nullable
+        public GlobalPos getBindingLoadedAndPowered(MinecraftServer server) {
+            return isBoundLoadedAndPowered(stack, server) ? getBinding() : null;
         }
     }
 }
