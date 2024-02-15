@@ -7,33 +7,27 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContainerMenu {
     private final E blockEntity;
-    private final Level level;
-
-    private final int slotCount;
-
-    public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, FriendlyByteBuf friendlyByteBuf) {
-        this(id, inventory, slotCount, menuType, inventory.player.level.getBlockEntity(friendlyByteBuf.readBlockPos()));
-    }
+    private final boolean hasSlot;
 
     @SuppressWarnings("unchecked")
-    public BaseContainerMenu(int id, Inventory inventory, int slotCount, MenuType<?> menuType, BlockEntity blockEntity) {
+    public BaseContainerMenu(int id, Inventory inventory, boolean hasSlot, MenuType<?> menuType, FriendlyByteBuf friendlyByteBuf) {
+        this(id, inventory, hasSlot, menuType, (E) inventory.player.level.getBlockEntity(friendlyByteBuf.readBlockPos()));
+    }
+
+    public BaseContainerMenu(int id, Inventory inventory, boolean hasSlot, MenuType<?> menuType, E blockEntity) {
         super(menuType, id);
-        this.blockEntity = (E) blockEntity;
-        level = inventory.player.level;
-        this.slotCount = slotCount;
+        this.blockEntity = blockEntity;
+        this.hasSlot = hasSlot;
         addPlayerInventory(inventory);
 
-        if(slotCount > 0) {
-            checkContainerSize(inventory, slotCount);
-            //TODO add support for actually adding slots
+        if(hasSlot) {
+            checkContainerSize(inventory, 1);
             this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> addSlot(new SlotItemHandler(handler, 0, 80, 37)));
         }
     }
@@ -52,22 +46,23 @@ public class BaseContainerMenu<E extends BaseBlockEntity> extends AbstractContai
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        if(slotCount == 0) return ItemStack.EMPTY;
+        if(!hasSlot) return ItemStack.EMPTY;
         Slot slot = slots.get(index);
         if(!slot.hasItem()) return ItemStack.EMPTY;
-        ItemStack sourceStack = slot.getItem();
+        ItemStack stack = slot.getItem();
 
-        if((index < 36 && !moveItemStackTo(sourceStack, 36, 36 + slotCount, false)) || (index < 36 + slotCount && !moveItemStackTo(sourceStack, 0, 36, false)) || index >= 36 + slotCount) {
+        //The 37's are 36 plus slot count
+        if((index < 36 && !moveItemStackTo(stack, 36, 37, false)) || (index < 37 && !moveItemStackTo(stack, 0, 36, false)) || index >= 37) {
             return ItemStack.EMPTY;
         }
 
-        if(sourceStack.getCount() == 0) {
+        if(stack.getCount() == 0) {
             slot.set(ItemStack.EMPTY);
         } else {
             slot.setChanged();
         }
-        slot.onTake(player, sourceStack);
-        return sourceStack.copy();
+        slot.onTake(player, stack);
+        return stack.copy();
     }
 
     @Override

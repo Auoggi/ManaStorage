@@ -9,6 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+@SuppressWarnings("DataFlowIssue")
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> blockEntities =
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ManaStorage.MODID);

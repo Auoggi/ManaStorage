@@ -20,6 +20,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("deprecation")
 public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
     public BaseBlockEntityBlock(Properties properties) {
         super(properties);
@@ -35,7 +36,7 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult hitResult) {
-        if(!level.isClientSide) {
+        if(!level.isClientSide()) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if(blockEntity instanceof BaseBlockEntity entity) {
                 if(entity instanceof HasEnergyStorage entityWithEnergyStorage) {
@@ -52,7 +53,7 @@ public abstract class BaseBlockEntityBlock extends BaseEntityBlock {
             }
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     @Override
