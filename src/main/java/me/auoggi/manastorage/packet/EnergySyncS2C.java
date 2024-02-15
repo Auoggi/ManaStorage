@@ -1,7 +1,6 @@
 package me.auoggi.manastorage.packet;
 
 import me.auoggi.manastorage.base.HasEnergyStorage;
-import me.auoggi.manastorage.block.entity.BasicImporterBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -31,11 +30,6 @@ public class EnergySyncS2C {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof HasEnergyStorage blockEntity) {
-                blockEntity.getEnergyStorage().setEnergy(energy);
-            }
-
-            //TODO Should be removed soon
-            if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof BasicImporterBlockEntity blockEntity) {
                 blockEntity.getEnergyStorage().setEnergy(energy);
             }
         });
