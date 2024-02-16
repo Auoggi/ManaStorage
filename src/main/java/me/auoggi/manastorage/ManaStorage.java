@@ -24,6 +24,7 @@ import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
+//TODO Lexica Botania Entries
 @Mod("manastorage")
 public class ManaStorage {
     public static final String MODID = "manastorage";

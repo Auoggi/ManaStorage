@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "YSY",
+        "SDS",
+        "YTY"
+    ],
+    "key": {
+        "Y": {
+            "item": "botania:yellow_petal"
+        },
+        "S": {
+            "item": "manastorage:64m_mana_storage_block"
+        },
+        "D": {
+            "item": "botania:mana_diamond"
+        },
+        "T": {
+            "item": "botania:terrasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:256m_mana_storage_block",
+        "count": 1
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BMB",
+        "MTM",
+        "BMB"
+    ],
+    "key": {
+        "B": {
+            "item": "botania:black_petal"
+        },
+        "M": {
+            "item": "botania:manasteel_ingot"
+        },
+        "T": {
+            "item": "botania:terrasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:storage_core",
+        "count": 1
+    }
+}

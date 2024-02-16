@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "LSL",
+        "SDS",
+        "LTL"
+    ],
+    "key": {
+        "L": {
+            "item": "botania:lime_petal"
+        },
+        "S": {
+            "item": "manastorage:256m_mana_storage_block"
+        },
+        "D": {
+            "item": "botania:mana_diamond"
+        },
+        "T": {
+            "item": "botania:terrasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:1024m_mana_storage_block",
+        "count": 1
+    }
+}

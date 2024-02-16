@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BMB",
+        "MPM",
+        "BMB"
+    ],
+    "key": {
+        "B": {
+            "item": "botania:black_petal"
+        },
+        "P": {
+            "item": "botania:mana_pool"
+        },
+        "M": {
+            "item": "botania:manasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:1m_mana_storage_block",
+        "count": 1
+    }
+}

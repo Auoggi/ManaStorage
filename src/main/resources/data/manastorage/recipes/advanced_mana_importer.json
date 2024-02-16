@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BIB",
+        "IGI",
+        "BIB"
+    ],
+    "key": {
+        "I": {
+            "item": "manastorage:basic_mana_importer"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "G": {
+            "item": "botania:gaia_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:advanced_mana_importer",
+        "count": 1
+    }
+}
