@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
+    "manastorage:advanced_mana_exporter",
+    "manastorage:advanced_mana_importer",
+    "manastorage:basic_mana_exporter",
+    "manastorage:basic_mana_importer",
     "manastorage:storage_core",
     "manastorage:1m_mana_storage_block",
     "manastorage:4m_mana_storage_block",

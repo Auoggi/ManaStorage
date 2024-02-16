@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BBB",
+        "BMB",
+        "BBB"
+    ],
+    "key": {
+        "B": {
+            "item": "botania:black_petal"
+        },
+        "M": {
+            "item": "botania:manasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:network_linker",
+        "count": 1
+    }
+}

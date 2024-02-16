@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "PSP",
+        "SDS",
+        "PMP"
+    ],
+    "key": {
+        "P": {
+            "item": "botania:purple_petal"
+        },
+        "S": {
+            "item": "manastorage:1m_mana_storage_block"
+        },
+        "D": {
+            "item": "botania:mana_diamond"
+        },
+        "M": {
+            "item": "botania:manasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:4m_mana_storage_block",
+        "count": 1
+    }
+}

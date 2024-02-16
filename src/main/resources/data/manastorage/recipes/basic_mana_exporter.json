@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "BPB",
+        "BDB",
         "MSM",
-        "BDB"
+        "BPB"
     ],
     "key": {
         "B": {
@@ -23,7 +23,7 @@
         }
     },
     "result": {
-        "item": "manastorage:basic_mana_importer",
+        "item": "manastorage:basic_mana_exporter",
         "count": 1
     }
 }

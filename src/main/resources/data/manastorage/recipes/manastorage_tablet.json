@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "botania:mana_mirror"
+    },
+    {
+      "item": "botania:mana_tablet"
+    },
+    {
+      "item": "manastorage:network_linker"
+    }
+  ],
+  "result": {
+    "item": "manastorage:manastorage_tablet",
+    "count": 1
+  }
+}

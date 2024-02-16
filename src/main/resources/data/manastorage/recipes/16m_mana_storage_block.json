@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "RSR",
+        "SDS",
+        "RMR"
+    ],
+    "key": {
+        "R": {
+            "item": "botania:red_petal"
+        },
+        "S": {
+            "item": "manastorage:4m_mana_storage_block"
+        },
+        "D": {
+            "item": "botania:mana_diamond"
+        },
+        "M": {
+            "item": "botania:manasteel_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:16m_mana_storage_block",
+        "count": 1
+    }
+}

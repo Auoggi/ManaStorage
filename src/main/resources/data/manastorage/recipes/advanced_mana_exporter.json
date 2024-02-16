@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BEB",
+        "EGE",
+        "BEB"
+    ],
+    "key": {
+        "E": {
+            "item": "manastorage:basic_mana_exporter"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "G": {
+            "item": "botania:gaia_ingot"
+        }
+    },
+    "result": {
+        "item": "manastorage:advanced_mana_exporter",
+        "count": 1
+    }
+}
