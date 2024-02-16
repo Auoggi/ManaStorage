@@ -1,6 +1,7 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.block.entity.CoreEntity;
+import me.auoggi.manastorage.block.entity.ExporterEntity;
 import me.auoggi.manastorage.block.entity.ImporterEntity;
 import me.auoggi.manastorage.block.entity.ManaStorageBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,6 +23,12 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<ImporterEntity>> advancedImporter = blockEntities.register("advanced_mana_importer",
             () -> BlockEntityType.Builder.of((pos, state) -> new ImporterEntity(ModBlockEntities.advancedImporter.get(), pos, state, -1, ManaStorage.advancedEnergyUsage, ManaStorage.advancedEnergyCapacity, "block.manastorage.advanced_mana_importer"), ModBlocks.advancedImporter.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ExporterEntity>> basicExporter = blockEntities.register("basic_mana_exporter",
+            () -> BlockEntityType.Builder.of((pos, state) -> new ExporterEntity(ModBlockEntities.basicExporter.get(), pos, state, ManaStorage.basicSpeed, ManaStorage.basicEnergyUsage, ManaStorage.basicEnergyCapacity, "block.manastorage.basic_mana_exporter"), ModBlocks.basicExporter.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ExporterEntity>> advancedExporter = blockEntities.register("advanced_mana_exporter",
+            () -> BlockEntityType.Builder.of((pos, state) -> new ExporterEntity(ModBlockEntities.advancedExporter.get(), pos, state, -1, ManaStorage.advancedEnergyUsage, ManaStorage.advancedEnergyCapacity, "block.manastorage.advanced_mana_exporter"), ModBlocks.advancedExporter.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<ManaStorageBlockEntity>> manaStorageBlock1m = blockEntities.register("1m_mana_storage_block",
             () -> BlockEntityType.Builder.of((pos, state) -> new ManaStorageBlockEntity(ModBlockEntities.manaStorageBlock1m.get(), pos, state, "block.manastorage.1m_mana_storage_block", 1000000), ModBlocks.manaStorageBlock1m.get()).build(null));

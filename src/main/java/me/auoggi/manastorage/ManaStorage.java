@@ -24,7 +24,6 @@ import vazkii.botania.client.gui.ManaBarTooltipComponent;
 
 import java.util.*;
 
-//TODO Importers, Exporters
 @Mod("manastorage")
 public class ManaStorage {
     public static final String MODID = "manastorage";
