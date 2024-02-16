@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "manastorage:block/advanced_mana_exporter",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "manastorage:block/advanced_mana_exporter",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "manastorage:block/advanced_mana_exporter"
+    },
+    "facing=south": {
+      "model": "manastorage:block/advanced_mana_exporter",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "manastorage:block/advanced_mana_exporter",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "manastorage:block/advanced_mana_exporter",
+      "y": 270
+    }
+  }
+}

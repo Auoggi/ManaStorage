@@ -1,8 +1,10 @@
 package me.auoggi.manastorage;
 
 import me.auoggi.manastorage.block.CoreBlock;
+import me.auoggi.manastorage.block.ExporterBlock;
 import me.auoggi.manastorage.block.ImporterBlock;
 import me.auoggi.manastorage.block.ManaStorageBlock;
+import me.auoggi.manastorage.block.entity.ExporterEntity;
 import me.auoggi.manastorage.block.entity.ImporterEntity;
 import me.auoggi.manastorage.block.entity.ManaStorageBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -56,6 +58,34 @@ public class ModBlocks {
                 public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
                     //noinspection DataFlowIssue
                     return createTickerHelper(blockEntityType, ModBlockEntities.advancedImporter.get(), level.isClientSide() ? null : ImporterEntity::tick);
+                }
+            });
+
+    public static final RegistryObject<Block> basicExporter = registerBlock("basic_mana_exporter",
+            () -> new ExporterBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f).requiresCorrectToolForDrops()) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ExporterEntity(ModBlockEntities.basicExporter.get(), blockPos, blockState, ManaStorage.basicSpeed, ManaStorage.basicEnergyUsage, ManaStorage.basicEnergyCapacity, "block.manastorage.basic_mana_exporter");
+                }
+
+                @Override
+                public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
+                    //noinspection DataFlowIssue
+                    return createTickerHelper(blockEntityType, ModBlockEntities.basicExporter.get(), level.isClientSide() ? null : ExporterEntity::tick);
+                }
+            });
+
+    public static final RegistryObject<Block> advancedExporter = registerBlock("advanced_mana_exporter",
+            () -> new ExporterBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.9f).requiresCorrectToolForDrops()) {
+                @Override
+                public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+                    return new ExporterEntity(ModBlockEntities.advancedExporter.get(), blockPos, blockState, -1, ManaStorage.advancedEnergyUsage, ManaStorage.advancedEnergyCapacity, "block.manastorage.advanced_mana_exporter");
+                }
+
+                @Override
+                public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
+                    //noinspection DataFlowIssue
+                    return createTickerHelper(blockEntityType, ModBlockEntities.advancedExporter.get(), level.isClientSide() ? null : ExporterEntity::tick);
                 }
             });
 
