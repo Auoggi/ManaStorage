@@ -116,6 +116,7 @@ public class ExporterEntity extends BaseBlockEntity implements HasEnergyStorage,
         if(ModBoundItem.of(itemStorage.getStackInSlot(0)) instanceof BaseBoundItem.BoundItem boundItem) {
             GlobalPos boundPos = boundItem.getBindingLoadedAndPowered(level.getServer());
 
+            assert level.getServer() != null;
             if(boundPos != null && LevelUtil.getBlockEntity(level.getServer().getLevel(boundPos.dimension()), boundPos.pos()) instanceof CoreEntity core && energyStorage.extractEnergy(energyUsage(), false) >= energyUsage() && core.getManaStorage().getManaStored() != 0) {
                 exportMana(level, blockPos, blockState, core.getManaStorage().extractMana(exportMana(level, blockPos, blockState, speed, true), false), false);
             }

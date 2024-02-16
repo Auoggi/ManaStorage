@@ -34,6 +34,7 @@ public interface ModManaItem {
 
     @Nullable
     static ModManaItem of(ItemStack stack) {
+        //noinspection DataFlowIssue
         return stack.getCapability(ModCapabilities.manaItem).orElse(null);
     }
 }

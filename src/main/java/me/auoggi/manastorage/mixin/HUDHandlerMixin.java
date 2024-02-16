@@ -27,6 +27,7 @@ public class HUDHandlerMixin {
         Player player = Minecraft.getInstance().player;
         List<ItemStack> stacks = new ArrayList<>();
 
+        assert player != null;
         for(ItemStack stack : Iterables.concat(player.getInventory().items, player.getInventory().offhand)) {
             if(!stack.isEmpty() && ModManaItem.of(stack) != null) {
                 stacks.add(stack);

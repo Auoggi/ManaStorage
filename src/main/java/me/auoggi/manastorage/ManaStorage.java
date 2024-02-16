@@ -78,6 +78,7 @@ public class ManaStorage {
         });
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void tick(final TickEvent.WorldTickEvent event) {
         //Make sure we only execute at the end of every tick and only when we are on the server

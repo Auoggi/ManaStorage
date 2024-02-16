@@ -39,6 +39,7 @@ public abstract class BaseBoundItem extends Item {
         Player player = context.getPlayer();
         Level level = context.getLevel();
 
+        assert player != null;
         if(player.isShiftKeyDown() && !level.isClientSide() && level.getBlockEntity(context.getClickedPos()) instanceof CoreEntity entity) {
             bind(player.getItemInHand(player.getUsedItemHand()), entity);
             return InteractionResult.SUCCESS;

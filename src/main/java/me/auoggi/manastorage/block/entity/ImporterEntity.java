@@ -115,6 +115,7 @@ public class ImporterEntity extends BaseBlockEntity implements HasEnergyStorage,
         if(ModBoundItem.of(itemStorage.getStackInSlot(0)) instanceof BaseBoundItem.BoundItem boundItem) {
             GlobalPos boundPos = boundItem.getBindingLoadedAndPowered(level.getServer());
 
+            assert level.getServer() != null;
             if(boundPos != null && LevelUtil.getBlockEntity(level.getServer().getLevel(boundPos.dimension()), boundPos.pos()) instanceof CoreEntity core && energyStorage.extractEnergy(energyUsage(), false) >= energyUsage() && core.getManaStorage().getRemainingCapacity() != 0) {
                 importMana(level, blockPos, blockState, core.getManaStorage().receiveMana(importMana(level, blockPos, blockState, speed, true), false), false);
             }
