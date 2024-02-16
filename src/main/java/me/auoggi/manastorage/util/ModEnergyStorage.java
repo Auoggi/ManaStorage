@@ -26,14 +26,6 @@ public abstract class ModEnergyStorage implements IEnergyStorage {
         return capacity - energy;
     }
 
-    public boolean isEmpty() {
-        return energy <= 0;
-    }
-
-    public boolean isFull() {
-        return energy >= capacity;
-    }
-
     public ModEnergyStorage(int capacity) {
         this.capacity = capacity;
     }

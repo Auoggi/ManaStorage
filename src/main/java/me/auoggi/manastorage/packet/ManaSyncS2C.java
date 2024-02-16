@@ -29,6 +29,7 @@ public class ManaSyncS2C {
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
+            assert Minecraft.getInstance().level != null;
             if(Minecraft.getInstance().level.getBlockEntity(blockPos) instanceof HasManaStorage blockEntity) {
                 blockEntity.getManaStorage().setMana(mana);
             }
