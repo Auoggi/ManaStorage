@@ -1,0 +1,16 @@
+{
+  "category": "manastorage:category",
+  "icon": "manastorage:network_linker",
+  "name": "item.manastorage.network_linker",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.entry.network_linker.description"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.bindable.click",
+      "recipe": "manastorage:network_linker"
+    }
+  ]
+}
