@@ -1,0 +1,16 @@
+{
+  "category": "manastorage:category",
+  "icon": "manastorage:manastorage_tablet",
+  "name": "item.manastorage.manastorage_tablet",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.entry.manastorage_tablet.description"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.bindable.click",
+      "recipe": "manastorage:manastorage_tablet"
+    }
+  ]
+}

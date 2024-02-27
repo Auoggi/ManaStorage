@@ -1,0 +1,41 @@
+{
+  "category": "manastorage:category",
+  "icon": "manastorage:1m_mana_storage_block",
+  "name": "lexicon.entry.storage_block.name",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.entry.storage_block.description"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.storage_block.1m",
+      "recipe": "manastorage:1m_mana_storage_block"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.storage_block.4m",
+      "recipe": "manastorage:4m_mana_storage_block"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.storage_block.16m",
+      "recipe": "manastorage:16m_mana_storage_block"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.storage_block.64m",
+      "recipe": "manastorage:64m_mana_storage_block"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.storage_block.256m",
+      "recipe": "manastorage:256m_mana_storage_block"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.storage_block.1024m",
+      "recipe": "manastorage:1024m_mana_storage_block"
+    }
+  ]
+}

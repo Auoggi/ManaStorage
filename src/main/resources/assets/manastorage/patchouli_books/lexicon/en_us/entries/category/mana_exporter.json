@@ -1,0 +1,21 @@
+{
+  "category": "manastorage:category",
+  "icon": "manastorage:basic_mana_exporter",
+  "name": "lexicon.entry.mana_exporter.name",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.entry.mana_exporter.description"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.mana_exporter.basic",
+      "recipe": "manastorage:basic_mana_exporter"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.entry.mana_exporter.advanced",
+      "recipe": "manastorage:advanced_mana_exporter"
+    }
+  ]
+}
