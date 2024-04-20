@@ -78,22 +78,14 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven { url = 'https://maven.blamejared.com' }
-    maven { url = 'https://maven.theillusivec4.top/' }
-    //REMOVE
-    maven { url = "https://cursemaven.com" }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:1.18.2-${forge_version}"
-
+    
     implementation fg.deobf("vazkii.botania:Botania:1.18.2-435")
-    implementation fg.deobf('vazkii.patchouli:Patchouli:1.18.2-71.1')
-    implementation fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.6.3')
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    //REMOVE
-    runtimeOnly fg.deobf("curse.maven:mekanism-268560:3875976")
 }
 
 tasks.named('processResources', ProcessResources).configure {

@@ -30,7 +30,7 @@ public abstract class EntityManaSparkMixin {
     @Unique
     private final List<Player> manastorage$receivingPlayers = new ArrayList<>();
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 1, shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 1, shift = At.Shift.BY, by = -2), locals = LocalCapture.CAPTURE_FAILHARD, remap = true)
     private void tick0(CallbackInfo ci, ISparkAttachable tile, IManaReceiver receiver, SparkUpgradeType upgrade, Collection<IManaSpark> transfers, List<Player> players, Map<Player, Map<IManaItem, Integer>> receivingPlayers, ItemStack input, Iterator<ItemStack> iterator1, Player player, List<ItemStack> stacks) {
         List<ItemStack> manaItems = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public abstract class EntityManaSparkMixin {
         stacks.clear();
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Map;isEmpty()Z", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Map;isEmpty()Z", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD, remap = true)
     private void tick1(CallbackInfo ci, ISparkAttachable tile, IManaReceiver receiver, SparkUpgradeType upgrade, Collection<IManaSpark> transfers, List<Player> players, Map<Player, Map<IManaItem, Integer>> receivingPlayers, ItemStack input) {
         if(!manastorage$receivingPlayers.isEmpty()) {
             Player player = manastorage$receivingPlayers.get(new Random().nextInt(manastorage$receivingPlayers.size()));
