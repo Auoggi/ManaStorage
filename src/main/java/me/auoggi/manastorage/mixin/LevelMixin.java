@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//Remap set to false and marking mixin as @Pseudo makes it possible to mix into classes that don't exist at runtime - see https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/org/spongepowered/asm/mixin/Pseudo.html
-@Pseudo @Mixin(value = Level.class, remap = false)
+@Pseudo @Mixin(value = Level.class)
 public class LevelMixin {
     @Shadow @Final private ResourceKey<Level> dimension;
 

@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "me.auoggi.manastorage.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "me.auoggi.manastorage.refmap.json",
+  "refmap": "manastorage.refmap.json",
   "mixins": [
     "EntityManaSparkMixin",
     "HUDHandlerMixin",
