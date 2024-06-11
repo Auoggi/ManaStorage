@@ -9,7 +9,6 @@
     },
     {
       "type": "crafting",
-      "text": "lexicon.entry.storage_core.recipe",
       "recipe": "manastorage:storage_core"
     }
   ]
